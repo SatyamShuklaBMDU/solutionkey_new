@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\CustomerDocument;
 use App\Models\CustomerFamily;
+use App\Models\Vendor;
 use App\Models\VendorWishlist;
 use Carbon\Carbon;
-use App\Models\Vendor;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,8 +16,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
-// use Illuminate\Support\Facades\Auth;
 
+// use Illuminate\Support\Facades\Auth;
 
 class CustomerController extends Controller
 {
@@ -37,13 +37,13 @@ class CustomerController extends Controller
                 'address' => 'nullable|string',
                 'profile_pic' => 'nullable|image|max:2048',
                 // 'password' => 'required|string|min:6',
-                
+
             ]);
             if ($request->has('dob') && $request->filled('dob')) {
-                        $validatedData['dob'] = Carbon::createFromFormat('d-m-Y', $request->dob)->format('Y-m-d');
-                    } else {
-                        $validatedData['dob'] = null; // Set dob to null if not provided
-            }            
+                $validatedData['dob'] = Carbon::createFromFormat('d-m-Y', $request->dob)->format('Y-m-d');
+            } else {
+                $validatedData['dob'] = null; // Set dob to null if not provided
+            }
             $validatedData['password'] = Hash::make('12345678');
             if ($request->hasFile('profile_pic')) {
                 $file = $request->file('profile_pic');
@@ -75,8 +75,8 @@ class CustomerController extends Controller
             return response()->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-    
-     public function customerDetails(Request $request)
+
+    public function customerDetails(Request $request)
     {
         $user = $request->user(); // Get the authenticated user
         // Check if user exists
@@ -88,7 +88,7 @@ class CustomerController extends Controller
             return response()->json(['success' => false, 'message' => 'User not authenticated'], 401);
         }
     }
-    
+
     public function update(Request $request)
     {
         try {
@@ -110,15 +110,16 @@ class CustomerController extends Controller
                 'password' => 'nullable|string|min:6',
                 'pin_no' => 'nullable|string|min:4',
             ]);
-                if ($request->has('dob') && $request->filled('dob')) {
-                            $validatedData['dob'] = Carbon::createFromFormat('d-m-Y', $request->dob)->format('Y-m-d');
-                        } else {
-                            $validatedData['dob'] = null; // Set dob to null if not provided
-                }              if ($request->hasFile('profile_pic')) {
-                $file = $request->file('profile_pic');
-                $fileName = $file->getClientOriginalName();
-                $file->move(public_path('profile_pics'), $fileName);
-                $validatedData['profile_pic'] = 'profile_pics/' . $fileName;
+            if ($request->has('dob') && $request->filled('dob')) {
+                $validatedData['dob'] = Carbon::createFromFormat('d-m-Y', $request->dob)->format('Y-m-d');
+            } else {
+                $validatedData['dob'] = null; // Set dob to null if not provided
+            }
+            if ($request->hasFile('profile_pic') && $request->file('profile_pic')->isValid()) {
+                $photoFileName = uniqid() . '.' . $request->profile_pic->extension();
+                $photoPath = $request->file('profile_pic')->move(public_path('user/profile_pic'), $photoFileName);
+                $photoRelativePath = 'user/profile_pic/' . $photoFileName;
+                $validatedData['profile_pic'] = $photoRelativePath;
             }
             if (isset($validatedData['password'])) {
                 $validatedData['password'] = Hash::make($validatedData['password']);
@@ -127,7 +128,6 @@ class CustomerController extends Controller
             return response()->json(['message' => 'Customer details updated successfully', 'data' => $customer]);
         } catch (ValidationException $e) {
             return response()->json(['error' => $e->validator->errors()], Response::HTTP_BAD_REQUEST);
-            // return response()->json(['message' => 'Customer details updated failed', 'data' => $customer]);
         } catch (QueryException $e) {
             return response()->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         } catch (\Exception $e) {
@@ -144,7 +144,7 @@ class CustomerController extends Controller
             $customer = Customer::where('phone_number', $request->phone_number)->first();
             if ($customer && $this->validatePin($request->pin_no, $customer->pin_no)) {
                 $token = $customer->createToken('CustomerToken')->plainTextToken;
-                return response()->json(['message'=>'Login Successfully','token' => $token,'id' => $customer->id], 200);
+                return response()->json(['message' => 'Login Successfully', 'token' => $token, 'id' => $customer->id], 200);
             } else {
                 throw ValidationException::withMessages([
                     'phone_number' => ['The provided credentials are incorrect.'],
@@ -163,30 +163,30 @@ class CustomerController extends Controller
     // public function logout(Request $request)
     // {
     //     $request->user('customers')->tokens()->delete();
-       
+
     //     return response()->json(['message' => 'Successfully logged out'], 200);
     // }
     public function logout(Request $request)
-{
-    // Check if the user is authenticated
-    if (Auth::user()) {
-        // Revoke the current user's token
-        $request->user()->tokens()->delete();
+    {
+        // Check if the user is authenticated
+        if (Auth::user()) {
+            // Revoke the current user's token
+            $request->user()->tokens()->delete();
 
-        // Return a response indicating successful logout
-        return response()->json([
-            'message' => 'Logout successful',
-            'status' => 'success'
-        ], 200);
-    } else {
-        // Return an error response if the user is not authenticated
-        return response()->json([
-            'message' => 'User not authenticated',
-            'status' => 'error'
-        ], 401);
+            // Return a response indicating successful logout
+            return response()->json([
+                'message' => 'Logout successful',
+                'status' => 'success',
+            ], 200);
+        } else {
+            // Return an error response if the user is not authenticated
+            return response()->json([
+                'message' => 'User not authenticated',
+                'status' => 'error',
+            ], 401);
+        }
     }
-}
-    
+
 //  public function logout()
 // {
 //     // Check if the user is authenticated
@@ -198,7 +198,7 @@ class CustomerController extends Controller
 
 //         // Delete the token
 //         $token->delete();
-        
+
 //         // Return a response indicating successful logout
 //         return response()->json([
 //             'message' => 'Logout Success',
@@ -213,8 +213,6 @@ class CustomerController extends Controller
 //     }
 // }
 
-
-    
     public function document(Request $request)
     {
         try {
@@ -248,10 +246,7 @@ class CustomerController extends Controller
             return response()->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-    
-   
 
-    
     public function AddFamily(Request $request)
     {
         try {
@@ -318,7 +313,7 @@ class CustomerController extends Controller
             return false;
         }
     }
-        public function allvendors(Request $request)
+    public function allvendors(Request $request)
     {
         $vendors = Vendor::all();
         $profile = "https://qbacp.com/solutionkey/public";
@@ -340,7 +335,7 @@ class CustomerController extends Controller
                 'cover_picture' => $profile . '/' . $vendor->cover_picture,
             ];
         })->toArray();
-        return response()->json(['status'=>'Success','vendors' => $vendorsArray, 'message' => 'Data Successfully'], 200);
+        return response()->json(['status' => 'Success', 'vendors' => $vendorsArray, 'message' => 'Data Successfully'], 200);
     }
 
     public function getVendorById(Request $request)

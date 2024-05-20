@@ -26,53 +26,78 @@
         .main_content .main_content_iner {
             margin: 0px !important;
         }
+        .statusSwitch {
+            --s: 18px;
+            /* adjust this to control the size*/
 
-        #customerTable {
-            font-size: 16px;
-            /* Adjust the font size as needed */
+            height: calc(var(--s) + var(--s)/5);
+            width: auto;
+            /* some browsers need this */
+            aspect-ratio: 2.25;
+            border-radius: var(--s);
+            margin: calc(var(--s)/2);
+            display: grid;
+            cursor: pointer;
+            background-color: #ff7a7a;
+            box-sizing: content-box;
+            overflow: hidden;
+            transition: .3s .1s;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
         }
 
-        .dt-button {
-            background-color: #033496 !important;
-            color: white !important;
+        .statusSwitch:before {
+            content: "";
+            padding: calc(var(--s)/10);
+            --_g: radial-gradient(circle closest-side at calc(100% - var(--s)/2) 50%, #000 96%, #0000);
+            background:
+                var(--_g) 0 /var(--_p, var(--s)) 100% no-repeat content-box,
+                var(--_g) var(--_p, 0)/var(--s) 100% no-repeat content-box,
+                #fff;
+            mix-blend-mode: darken;
+            filter: blur(calc(var(--s)/12)) contrast(11);
+            transition: .4s, background-position .4s .1s,
+                padding cubic-bezier(0, calc(var(--_i, -1)*200), 1, calc(var(--_i, -1)*200)) .25s .1s;
         }
 
-        .dataTables_wrapper .dataTables_paginate .paginate_button {
-            font-size: 14px;
-            padding: 5px 10px;
-            white-space: nowrap;
+        .statusSwitch:checked {
+            background-color: #85ff7a;
         }
 
-        #customerTable_previous {
-            transform: translateX(-20px);
+        .statusSwitch:checked:before {
+            padding: calc(var(--s)/10 + .05px) calc(var(--s)/10);
+            --_p: 100%;
+            --_i: 1;
         }
     </style>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
 @endsection
 
 @section('content-area')
     <section class="main_content dashboard_part">
         <nav aria-label="breadcrumb" class="mb-5">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Customer Management</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Customer Details</li>
+                <li class="breadcrumb-item"><a href="#"
+                        style="text-decoration: none;color:#0d9603 !important;font-weight:600;font-size:20px;">Customer
+                        Management</a></li>
+                <li class="breadcrumb-item active" aria-current="page"
+                    style="text-decoration: none;color:#033496 !important;font-weight:600;font-size:18px;">Customer Details
+                </li>
             </ol>
         </nav>
         <div class="main_content_iner">
             <div class="container-fluid plr_30 body_white_bg pt_30">
                 <div class="row justify-content-center">
                     <div class="col-lg-12 ">
-                        <div class="row mb" style="margin-bottom: 30px; margin-left: 5px;">
-                        <form action="{{ route('customer-filters') }}" method="post">
+                        <div class="row mb" style="margin-bottom: 50px; margin-left: 5px;">
+                            <form action="{{ route('customer-filters') }}" method="post">
                                 @csrf
-                                @include('admin.date')
-                                <div class="col-md-1 text-end" style="margin-left: 10px; margin-top: 47px;">
-                                    <a class="btn text-white shadow-lg" href="{{ route('customer-shows') }}"
-                                        style="background-color:#033496;">Reset</a>
+                                <div class="row">
+                                    @include('admin.date')
+                                    <div class="col-sm-1" style="margin-left: 10px; margin-top: 40px;">
+                                        <a class="btn text-white shadow-lg" href="{{ route('customer-show') }}"
+                                            style="background-color:#033496;">Reset</a>
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -83,51 +108,38 @@
                                     <table id="customerTable" class="display nowrap" style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th>S no.</th>
-                                                <th>Registration Date</th>
-                                                <th>Customer Profile</th>
-                                                <th>Customer ID</th>
-                                                <th>Name</th>
-                                                <th>Phone number</th>
-                                                <th>Email</th>
-                                                <th>DOB</th>
-                                                <th>Gender</th>
-                                                <th>Martial Status</th>
-                                                <th>Address</th>
-                                                <th>City-State</th>
-                                                <th>Action</th>
-                                                <th>Remark</th>
+                                                <th style="text-align: center;">S no.</th>
+                                                <th style="text-align: center;">Registration Date</th>
+                                                <th style="text-align: center;">Customer ID</th>
+                                                <th style="text-align: center;">Name</th>
+                                                <th style="text-align: center;">Phone number</th>
+                                                <th style="text-align: center;">Email</th>
+                                                <th style="text-align: center;">Action</th>
+                                                <th style="text-align: center;">Remark</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($customer as $customers)
                                                 <tr data-customer-id="{{ $customers->id }}">
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ date('d-m-Y', strtotime($customers->created_at)) }}</td>
-                                                    <td><img src="{{ asset($customers->profile_pic) }}" width="100px" alt=""></td>
-                                                    <td>{{ $customers->customers_id }}</td>
-                                                    <td>{{ $customers->name }}</td>
-                                                    <td>{{ $customers->phone_number }}</td>
-                                                    <td>{{ $customers->email }}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($customers->dob)->format('d/m/Y') }}</td>
-                                                    {{--<td>{{ $customers->dob }}</td>--}}
-                                                    <td>{{ $customers->gender }}</td>
-                                                    <td>{{ $customers->marital_status }}</td>
-                                                    <td>{{ $customers->address }}</td>
-                                                    <td>{{ $customers->city }}-{{ $customers->state }}</td>
-                                                    <td>
-                                                        <select class="form-control change-status-dropdown" data-customer-id="{{ $customers->id }}">
-                                                            <option value="1" {{ $customers->account_status == 1 ? 'selected' : '' }}>Activate</option>
-                                                            <option value="0" {{ $customers->account_status == 0 ? 'selected' : '' }}>Deactivate</option>
-                                                        </select>
+                                                    <td style="text-align: center;">{{ $loop->iteration }}</td>
+                                                    <td style="text-align: center;">
+                                                        {{ date('d-m-Y', strtotime($customers->created_at)) }}</td>
+                                                    <td style="text-align: center;">{{ $customers->customers_id }}</td>
+                                                    <td style="text-align: center;">{{ $customers->name }}</td>
+                                                    <td style="text-align: center;">{{ $customers->phone_number }}</td>
+                                                    <td style="text-align: center;">{{ $customers->email }}</td>
+                                                    <td style="text-align: center;">
+                                                        <div class="d-flex">
+                                                            <input type="checkbox"
+                                                                {{ $customers->account_status == 1 ? 'checked' : '' }}
+                                                                class="statusSwitch">
+                                                            <i class="fa fa-eye"
+                                                                style="top: 10px;position: relative;cursor: pointer;"
+                                                                aria-hidden="true"></i>
+                                                        </div>
                                                     </td>
-                                                    <td>
-                                                        @if ($customers->account_status == 0)
-                                                        {{ $customers->deactivation_remark ?? '' }}
-                                                        @else
-                                                            --
-                                                        @endif
-                                                    </td>
+                                                    <td style="text-align: center;">
+                                                        {{ $customers->deactivation_remark ?? '--' }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -140,80 +152,128 @@
             </div>
         </div>
     </section>
+    <!-- Modal -->
+    <div class="modal fade" id="customerDetailModal" tabindex="-1" aria-labelledby="customerDetailModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="customerDetailModalLabel">Customer Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center">
+                        <img id="customerProfilePic" src="" alt="Profile Picture"
+                            class="img-fluid rounded-circle mb-3" style="display: none; max-width: 150px;">
+                    </div>
+                    <p><strong>ID:</strong> <span id="customerId"></span></p>
+                    <p><strong>Name:</strong> <span id="customerName"></span></p>
+                    <p><strong>Gender:</strong> <span id="customerGender"></span></p>
+                    <p><strong>Phone Number:</strong> <span id="customerPhone"></span></p>
+                    <p><strong>Email:</strong> <span id="customerEmail"></span></p>
+                    <p><strong>Marital Status:</strong> <span id="customerMaritalStatus"></span></p>
+                    <p><strong>Date of Birth:</strong> <span id="customerDob"></span></p>
+                    <p><strong>City:</strong> <span id="customerCity"></span></p>
+                    <p><strong>State:</strong> <span id="customerState"></span></p>
+                    <p><strong>Address:</strong> <span id="customerAddress"></span></p>
+                    <p><strong>Registration Date:</strong> <span id="customerRegistrationDate"></span></p>
+                    <p><strong>Status:</strong> <span id="customerStatus"></span></p>
+                    <p><strong>Remark:</strong> <span id="customerRemark"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
-
 @section('script-area')
-    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Existing scripts -->
     <script>
         $(document).ready(function() {
-            $('.change-status-dropdown').change(function() {
-                var customerId = $(this).data('customer-id');
-                var newStatus = $(this).val();
-                var remark = '';
+            $('.statusSwitch').change(function() {
+                var customerId = $(this).closest('tr').data('customer-id');
+                var newStatus = $(this).is(':checked') ? 1 : 0;
+                var checkbox = $(this);
+
                 if (newStatus == 0) {
-                    remark = prompt("Please enter the reason for deactivation:", "");
-                    if (remark === null) {
-                        return;
-                    }
-                }
-                $.ajax({
-                    url: "{{ url('/change-customer-status') }}",
-                    method: 'POST',
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        customer_id: customerId,
-                        new_status: newStatus,
-                        remark: remark,
-                    },
-                    success: function(response) {
-                        alert('Account status Changed');
-                        location.reload();
-                        console.log(response);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
-                    }
-                });
-            });
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-            $('.delete-location').click(function(event) {
-                event.preventDefault();
-                var CustomerId = $(this).closest('tr').attr('data-customer-id');
-                var url = "{{ url('/delete-customer/:CustomerId') }}";
-                url = url.replace(':CustomerId', CustomerId);
-                if (confirm('Are you sure you want to delete this Number?')) {
+                    Swal.fire({
+                        title: 'Reason for Deactivation',
+                        input: 'text',
+                        inputLabel: 'Please enter the reason for deactivation:',
+                        inputPlaceholder: 'Enter reason',
+                        showCancelButton: true,
+                        inputValidator: (value) => {
+                            if (!value) {
+                                return 'You need to provide a reason!'
+                            }
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url: "{{ url('/change-customer-status') }}",
+                                method: 'POST',
+                                data: {
+                                    _token: "{{ csrf_token() }}",
+                                    customer_id: customerId,
+                                    new_status: newStatus,
+                                    remark: result.value,
+                                },
+                                success: function(response) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Success',
+                                        text: 'Account status changed successfully!',
+                                    }).then(function() {
+                                        location.reload();
+                                    });
+                                    console.log(response);
+                                },
+                                error: function(xhr, status, error) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: 'There was an error changing the account status.',
+                                    });
+                                    console.error(xhr.responseText);
+                                }
+                            });
+                        } else {
+                            checkbox.prop('checked',
+                                true); // Recheck the checkbox if the user cancels
+                        }
+                    });
+                } else {
                     $.ajax({
-                        url: url,
-                        type: 'DELETE',
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        url: "{{ url('/change-customer-status') }}",
+                        method: 'POST',
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            customer_id: customerId,
+                            new_status: newStatus,
                         },
                         success: function(response) {
-                            alert('Deleted successfully');
-                            location.reload();
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'Account status changed successfully!',
+                            }).then(function() {
+                                location.reload();
+                            });
+                            console.log(response);
                         },
                         error: function(xhr, status, error) {
-                            alert('Error deleting Number:', error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'There was an error changing the account status.',
+                            });
+                            console.error(xhr.responseText);
                         }
                     });
                 }
             });
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
+
             $('#customerTable').DataTable({
                 dom: 'Bfrtip',
                 buttons: [
@@ -221,17 +281,74 @@
                 ]
             });
         });
-        $(function() {
-            $('#datepickerFrom').datepicker({
-                format: 'dd-mm-yyyy',
-                autoclose: true,
-                todayHighlight: true,
-            });
+    </script>
+    <script>
+        // Helper function to format date
+        function formatDate(dateString) {
+            const options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
+            const date = new Date(dateString);
+            return date.toLocaleDateString(undefined, options);
+        }
 
-            $('#datepickerTo').datepicker({
-                format: 'dd-mm-yyyy',
-                autoclose: true,
-                todayHighlight: true,
+        // Function to fetch and display customer details
+        function showCustomerDetails(customerId) {
+            fetch("{{ url('/get-customer-details') }}/" + customerId)
+                .then(response => response.json())
+                .then(response => {
+                    if (response.error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: response.error,
+                        });
+                        return;
+                    }
+
+                    document.getElementById('customerId').textContent = response.id;
+                    document.getElementById('customerName').textContent = response.name;
+                    document.getElementById('customerGender').textContent = response.gender;
+                    document.getElementById('customerPhone').textContent = response.phone_number;
+                    document.getElementById('customerEmail').textContent = response.email;
+                    document.getElementById('customerMaritalStatus').textContent = response.marital_status;
+                    document.getElementById('customerDob').textContent = formatDate(response.dob);
+                    document.getElementById('customerCity').textContent = response.city;
+                    document.getElementById('customerState').textContent = response.state;
+                    document.getElementById('customerAddress').textContent = response.address;
+                    document.getElementById('customerRegistrationDate').textContent = formatDate(response.created_at);
+                    document.getElementById('customerStatus').textContent = response.account_status == 1 ? 'Active' :
+                        'Inactive';
+                    document.getElementById('customerRemark').textContent = response.deactivation_remark || '--';
+
+                    const profilePic = document.getElementById('customerProfilePic');
+                    if (response.profile_pic) {
+                        profilePic.src = response.profile_pic;
+                        profilePic.style.display = 'block';
+                    } else {
+                        profilePic.style.display = 'none';
+                    }
+
+                    const modal = new bootstrap.Modal(document.getElementById('customerDetailModal'));
+                    modal.show();
+                })
+                .catch(error => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'There was an error fetching the customer details.',
+                    });
+                    console.error(error);
+                });
+        }
+
+        // Add event listener to all .fa-eye icons
+        document.querySelectorAll('.fa-eye').forEach(icon => {
+            icon.addEventListener('click', function() {
+                const customerId = this.closest('tr').dataset.customerId;
+                showCustomerDetails(customerId);
             });
         });
     </script>

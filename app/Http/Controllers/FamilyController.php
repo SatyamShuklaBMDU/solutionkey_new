@@ -8,10 +8,9 @@ use Illuminate\Http\Request;
 class FamilyController extends Controller
 {
     public function index()
-    {   
+    {
         $customer_families = CustomerFamily::all();
-        return view('admin.all_family',compact('customer_families'));
-        dd($customer_families);
+        return view('admin.all_family', compact('customer_families'));
     }
 
     public function filter(Request $request)
@@ -22,10 +21,27 @@ class FamilyController extends Controller
         ]);
         $start = $request->start;
         $end = $request->end;
-        $customer_families= CustomerFamily::whereDate('created_at', '>=', $start)
+        $customer_families = CustomerFamily::whereDate('created_at', '>=', $start)
             ->whereDate('created_at', '<=', $end)
             ->orderBy('created_at', 'desc')
             ->get();
         return view('admin.all_family', compact('customer_families', 'start', 'end'));
     }
+    public function getCustomerDetails($id)
+    {
+        $customer = CustomerFamily::find($id);
+
+        if ($customer) {
+            return response()->json([
+                'success' => true,
+                'data' => $customer,
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Customer not found',
+            ], 404);
+        }
+    }
+
 }

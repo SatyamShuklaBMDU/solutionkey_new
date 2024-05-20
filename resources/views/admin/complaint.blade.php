@@ -58,6 +58,7 @@
     </style>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+    
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
 @endsection
@@ -65,8 +66,8 @@
     <section class="main_content dashboard_part">
         <nav aria-label="breadcrumb" class="mb-5">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#" style="text-decoration: none;color:#0d9603 !important;font-weight:600;font-size:20px;">Complaints Management</a></li>
-                <li class="breadcrumb-item active" aria-current="page" style="text-decoration: none;color:#033496;font-weight:600;font-size:18px;">All Complaints</li>
+                <li class="breadcrumb-item"><a href="#" style="text-decoration: none;color:#0d9603 !important;font-weight:600;font-size:20px;">Complaint Management</a></li>
+                <li class="breadcrumb-item active" aria-current="page" style="text-decoration: none;color:#033496;font-weight:600;font-size:18px;">All Complaint</li>
             </ol>
         </nav>
         @if (session()->has('success'))
@@ -78,13 +79,15 @@
             <div class="container-fluid plr_30 body_white_bg pt_30">
                 <div class="row justify-content-center">
                     <div class="col-lg-12 ">
-                        <div class="row mb" style="margin-bottom: 30px; margin-left: 5px;">
+                        <div class="row mb" style="margin-bottom: 50px; margin-left: 5px;">
                             <form action="{{ route('complaint-filter') }}" method="post">
                                 @csrf
+                                <div class="row">
                                 @include('admin.date')
-                                <div class="col-md-1 text-end" style="margin-left: 10px; margin-top: 47px;">
+                                <div class="col-sm-1 text-end" style="margin-top: 40px;">
                                     <a class="btn text-white shadow-lg" href="{{ route('complaint') }}"
                                         style="background-color:#033496;">Reset</a>
+                                </div>
                                 </div>
                             </form>
                         </div>

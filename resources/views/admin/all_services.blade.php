@@ -57,7 +57,9 @@
         }
 
         /* For DataTable */
-        #customerTable_wrapper, #customerTable th, #customerTable td {
+        #customerTable_wrapper,
+        #customerTable th,
+        #customerTable td {
             font-size: 15px;
         }
 
@@ -65,17 +67,25 @@
         .ui-datepicker {
             font-size: 15px;
         }
+
         /* For input placeholder */
-        ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+        ::-webkit-input-placeholder {
+            /* Chrome/Opera/Safari */
             font-size: 15px;
         }
-        ::-moz-placeholder { /* Firefox 19+ */
+
+        ::-moz-placeholder {
+            /* Firefox 19+ */
             font-size: 15px;
         }
-        :-ms-input-placeholder { /* IE 10+ */
+
+        :-ms-input-placeholder {
+            /* IE 10+ */
             font-size: 15px;
         }
-        :-moz-placeholder { /* Firefox 18- */
+
+        :-moz-placeholder {
+            /* Firefox 18- */
             font-size: 15px;
         }
     </style>
@@ -88,8 +98,11 @@
     <section class="main_content dashboard_part">
         <nav aria-label="breadcrumb" class="mb-5">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#" style="text-decoration: none;color:#0d9603 !important;font-weight:600;font-size:20px;">Services Management</a></li>
-                <li class="breadcrumb-item active" aria-current="page" style="text-decoration: none;color:#033496 !important;font-weight:600;font-size:18px;">All Services</li>
+                <li class="breadcrumb-item"><a href="#"
+                        style="text-decoration: none;color:#0d9603 !important;font-weight:600;font-size:20px;">Services
+                        Management</a></li>
+                <li class="breadcrumb-item active" aria-current="page"
+                    style="text-decoration: none;color:#033496 !important;font-weight:600;font-size:18px;">All Services</li>
             </ol>
         </nav>
         @if (session()->has('success'))
@@ -100,18 +113,20 @@
         <div class="main_content_iner">
             <div class="container-fluid plr_30 body_white_bg pt_30">
                 <div class="row justify-content-center">
-                    <div class="col-lg-12 ">
-                        <div class="row mb" style="margin-bottom: 30px; margin-left: 5px;">
+                    <div class="col-lg-12">
+                        <div class="row" style="margin-bottom: 50px; margin-left: 5px;">
                             <form action="{{ route('service-filter') }}" method="post">
                                 @csrf
-                                @include('admin.date')
-                                <div class="col-md-1 text-end" style="margin-left: 10px; margin-top: 47px;">
-                                    <a class="btn text-white shadow-lg" href="{{ route('service') }}"
-                                        style="background-color:#033496;font-size:15px;">Reset</a>
-                                </div>
-                                <div class="col-md-1 text-end float-end "  style="margin-right: 50px; margin-top: 47px;">
-                                    <a class="btn text-white shadow-lg" href="{{ route('service-create') }}"
-                                        style="background-color:#0d9603;font-size:15px;">Create New Service</a>
+                                <div class="row">
+                                    @include('admin.date')
+                                    <div class="col-sm-1" style="margin-top: 40px;">
+                                        <a class="btn text-white shadow-lg" href="{{ route('service') }}"
+                                            style="background-color:#033496;font-size:15px;">Reset</a>
+                                    </div>
+                                    <div class="col-sm-3 text-end" style="margin-top: 40px;">
+                                        <a class="btn btn-sm text-white" href="{{ route('service-create') }}"
+                                            style="background-color:#0d9603;font-size:15px;">Create New Service</a>
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -121,54 +136,49 @@
                                 <table id="customerTable" class="display nowrap" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th>S No.</th>
-                                            <th>Image</th>
-                                            <th> Date</th>
-                                            <th>Services Name</th>
-                                            {{-- <th>Subject</th> --}}
-                                            <th>Description</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
+                                            <th class="text-center">S No.</th>
+                                            <th class="text-center">Image</th>
+                                            <th class="text-center"> Date</th>
+                                            <th class="text-center">Services Name</th>
+                                            <th class="text-center">Description</th>
+                                            <th class="text-center">Status</th>
+                                            <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($services as $service)
                                             <tr class="odd" data-user-id="{{ $service->id }}">
-                                                <td class="sorting_1">{{ $loop->iteration }}</td>
+                                                <td class="sorting_1 text-center">{{ $loop->iteration }}</td>
                                                 @if ($service->image)
-                                                    <td><img class="rounded" src="{{ asset($service->image) }}"
-                                                            alt="Service Image" style="width: 100px; height: 70px;"></td>
+                                                    <td class="text-center"><a href="{{ asset($service->image) }}" target="_blank"
+                                                            rel="noopener noreferrer"><img class="rounded"
+                                                                src="{{ asset($service->image) }}" alt="Service Image"
+                                                                style="width: 100px; height: 70px;"></a></td>
                                                 @else
-                                                    <td>
+                                                    <td class="text-center">
                                                         <p>No image available</p>
                                                     </td>
                                                 @endif
 
-                                                <td>{{ \Carbon\Carbon::parse($service->created_at)->format('d M,Y') }}
-                                                </td>
-                                                <td>{{ $service->services_name }}</td>
-                                                <td>{{ $service->description }}</td>
-                                                <td>
+                                                <td class="text-center">{{ \Carbon\Carbon::parse($service->created_at)->format('d M,Y') }}</td>
+                                                <td class="text-center">{{ $service->services_name }}</td>
+                                                <td class="text-center">{{ $service->description }}</td>
+                                                <td class="text-center">
                                                     @if ($service->status == 1)
                                                         <div class="job-status text-capitalize">Active</div>
                                                     @else
                                                         <div class="job-status text-capitalize">Block</div>
                                                     @endif
                                                 </td>
-                                                <td class="action">
-                                                    {{-- <button type="button" class="btn btn-outline-danger">
-                                                        <i class="fa fa-trash-o delete-location"
-                                                            data-service-id="{{ $service->id }}"
-                                                            style="padding-right: -10px;font-size: 17px;"></i>
-                                                    </button> --}}
-                                                    <button type="button" class="btn btn-outline-danger">
-                                                        <i class="fa fa-trash-o delete-location"
-                                                            data-service-id="{{ $service->id }}"
+                                                <td class="action text-center">
+                                                    <button type="button" class="btn btn-outline-danger delete-service"
+                                                        data-service-id="{{ $service->id }}">
+                                                        <i class="fa fa-trash-o"
                                                             style="padding-right: -10px; font-size: 17px;"></i>
                                                     </button>
-                                                    
+
                                                     <button type="button" class="btn btn-outline-danger">
-                                                        <a href="{{ route('services-edit', $service->id) }}">
+                                                        <a href="{{ route('services-edit', encrypt($service->id)) }}">
                                                             <i class="fa fa-pencil"
                                                                 style="padding-right: -10px;font-size: 17px;"></i>
                                                         </a>
@@ -184,53 +194,47 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="serviceModal" tabindex="-1" aria-labelledby="serviceModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="serviceModalLabel">Create New Service</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="serviceForm" action="" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="service_id" id="service_id">
+                            <div class="form-group">
+                                <label for="services_name">Service Name</label>
+                                <input type="text" name="services_name" class="form-control" id="services_name"
+                                    aria-describedby="textHelp" placeholder="Please enter your service name">
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <input type="text" name="description" class="form-control" id="description"
+                                    aria-describedby="textHelp" placeholder="Please enter your description">
+                            </div>
+                            <div class="form-group">
+                                <label for="status">Status</label>
+                                <select name="status" id="status" class="form-control">
+                                    <option value="1">Active</option>
+                                    <option value="0">Block</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="image">Image</label>
+                                <input type="file" class="form-control" id="image" name="image">
+                            </div>
+                            <button type="submit" class="btn btn-primary" id="submitServiceButton">Save changes</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 @endsection
 @section('script-area')
-    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0-alpha1/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $("#alluser").click(function() {
-                $("input[type=checkbox]").prop('checked', $(this).prop('checked'));
-            });
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-            $('.delete-location').click(function(event) {
-                event.preventDefault();
-                var serviceId = $(this).data('service-id');
-                if (confirm('Are you sure you want to delete this service?')) {
-                    $.ajax({
-                        url: 'delete-service/' + serviceId,
-                        type: 'DELETE',
-                        data: {
-                            id: serviceId
-                        },
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function(response) {
-                            alert('Service deleted successfully');
-                            location.reload(); // Reload the page after deletion
-                        },
-                        error: function(xhr, status, error) {
-                            alert('Error deleting service: ' + error);
-                        }
-                    });
-                }
-            });
-        });
-    </script>
     <script>
         $(document).ready(function() {
             $('#customerTable').DataTable({
@@ -239,18 +243,54 @@
                     'copy', 'csv', 'excel', 'pdf', 'print'
                 ]
             });
-        });
-        $(function() {
-            $('#datepickerFrom').datepicker({
-                format: 'dd-mm-yyyy',
-                autoclose: true,
-                todayHighlight: true,
-            });
-
-            $('#datepickerTo').datepicker({
-                format: 'dd-mm-yyyy',
-                autoclose: true,
-                todayHighlight: true,
+            $('.delete-service').on('click', function() {
+                var serviceId = $(this).data('service-id');
+                var deleteUrl = `{{ url('delete-service') }}/${serviceId}`;
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You won\'t be able to revert this!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: deleteUrl,
+                            type: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': $('input[name="_token"]').val()
+                            },
+                            success: function(data) {
+                                console.log(data);
+                                if (data.status == true) {
+                                    Swal.fire(
+                                        'Deleted!',
+                                        'The service has been deleted.',
+                                        'success'
+                                    ).then(() => {
+                                        location.reload();
+                                    });
+                                } else {
+                                    Swal.fire(
+                                        'Error!',
+                                        'An error occurred. Please try again.',
+                                        'error'
+                                    );
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('An error occurred:', status, error);
+                                Swal.fire(
+                                    'Error!',
+                                    'Failed to delete the service. Please try again.',
+                                    'error'
+                                );
+                            }
+                        });
+                    }
+                });
             });
         });
     </script>

@@ -103,13 +103,15 @@
             <div class="container-fluid plr_30 body_white_bg pt_30">
                 <div class="row justify-content-center">
                     <div class="col-lg-12 ">
-                        <div class="row mb" style="margin-bottom: 30px; margin-left: 5px;font-size:15px;">
+                        <div class="row mb" style="margin-bottom: 50px; margin-left: 5px;font-size:15px;">
                             <form action="{{ route('user-filter') }}" method="post">
                                 @csrf
+                                <div class="row">
                                 @include('admin.date')
-                                <div class="col-md-1 text-end" style="margin-left: 10px; margin-top: 47px;font-size:15px;">
+                                <div class="col-sm-1 text-end" style="margin-top: 40px;font-size:15px;">
                                     <a class="btn text-white shadow-lg" href="{{ route('all-users') }}"
                                         style="background-color:#033496;font-size:15px;">Reset</a>
+                                </div>
                                 </div>
                             </form>
                         </div>

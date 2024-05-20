@@ -2236,12 +2236,17 @@ table.dataTable.dtr-inline.collapsed>tbody>tr.parent>th:first-child::before {
 .header_iner {
 	background-color: #fff;
 	position: fixed;
-	top: 0;
-	z-index: 99;
+	z-index: 10;
 	padding: 30px;
-	position: relative;
 	margin: 27px 30px;
 	border-radius: 7px
+}
+
+.fixed-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%; 
 }
 
 @media(max-width:575.98px) {
@@ -2445,7 +2450,7 @@ table.dataTable.dtr-inline.collapsed>tbody>tr.parent>th:first-child::before {
 }
 
 .profile_info img {
-	max-width: 77px;
+	max-width: 47px;
 	max-height: 77px;
 	border-radius: 50%;
 	border: 2px solid #a5adc6;

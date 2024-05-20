@@ -11,9 +11,10 @@ class CustomerController extends Controller
     public function show()
     {
         $customer = Customer::all();
+        // dd('ok');
         return view('admin.all_customer', compact('customer'));
     }
-    
+
     public function filter(Request $request)
     {
         // dd($request);
@@ -48,14 +49,41 @@ class CustomerController extends Controller
         if ($newStatus == 0 && !empty($remark)) {
             $customer->deactivation_remark = $remark;
             $customer->deactivated_at = Carbon::now();
-        }else {
+        } else {
             $customer->deactivated_at = null;
             $customer->deactivation_remark = null;
         }
         $customer->save();
         return response()->json(['success' => true, 'message' => 'Account status updated successfully']);
     }
-    public function family(){
+    public function family()
+    {
         return view('admin.all_family');
+    }
+
+    public function getCustomerDetails($id)
+    {
+        $customer = Customer::find($id);
+
+        if ($customer) {
+            return response()->json([
+                'id' => $customer->customers_id,
+                'name' => $customer->name,
+                'gender' => $customer->gender,
+                'phone_number' => $customer->phone_number,
+                'email' => $customer->email,
+                'marital_status' => $customer->marital_status,
+                'dob' => $customer->dob,
+                'city' => $customer->city,
+                'state' => $customer->state,
+                'address' => $customer->address,
+                'profile_pic' => $customer->profile_pic ? asset($customer->profile_pic) : null,
+                'created_at' => $customer->created_at,
+                'account_status' => $customer->account_status,
+                'deactivation_remark' => $customer->deactivation_remark,
+            ]);
+        }
+
+        return response()->json(['error' => 'Customer not found'], 404);
     }
 }

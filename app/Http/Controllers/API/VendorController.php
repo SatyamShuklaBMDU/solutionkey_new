@@ -97,17 +97,17 @@ class VendorController extends Controller
                 'cover_picture' => 'nullable|image|max:2048',
                 'pin_no' => 'nullable|string|min:4',
             ]);
-            if ($request->hasFile('profile_picture')) {
-                $profilePicture = $request->file('profile_picture');
-                $profilePicturePath = $profilePicture->getClientOriginalName();
-                $profilePicture->move(public_path('vendor_profile_pic'), $profilePicturePath);
-                $validatedData['profile_picture'] = 'vendor_profile_pic/' . $profilePicturePath;
+            if ($request->hasFile('profile_picture') && $request->file('profile_picture')->isValid()) {
+                $photoFileName = uniqid() . '.' . $request->profile_picture->extension();
+                $photoPath = $request->file('profile_picture')->move(public_path('vendor/profile_picture'), $photoFileName);
+                $photoRelativePath = 'vendor/profile_picture/' . $photoFileName;
+                $validatedData['profile_picture'] = $photoRelativePath;
             }
-            if ($request->hasFile('cover_picture')) {
-                $coverPicture = $request->file('cover_picture');
-                $coverPicturePath = $coverPicture->getClientOriginalName();
-                $coverPicture->move(public_path('vendor_cover_pic'), $coverPicturePath);
-                $validatedData['cover_picture'] = 'vendor_cover_pic/' . $coverPicturePath;
+            if ($request->hasFile('cover_picture') && $request->file('cover_picture')->isValid()) {
+                $photoFileName = uniqid() . '.' . $request->cover_picture->extension();
+                $photoPath = $request->file('cover_picture')->move(public_path('vendor/cover_picture'), $photoFileName);
+                $photoRelativePath = 'vendor/cover_picture/' . $photoFileName;
+                $validatedData['cover_picture'] = $photoRelativePath;
             }
             $vendor->update($validatedData);
             return response()->json(['message' => 'Vendor details updated successfully', 'data' => $vendor], 200);
@@ -182,7 +182,6 @@ class VendorController extends Controller
         return $inputPin === $storedPin;
     }
 
-
     // public function logout(Request $request)
     // {
     //     if(Auth::user()){
@@ -190,6 +189,7 @@ class VendorController extends Controller
     //         return response()->json(['message' => 'Logged out successfully'], 200);
     //     }
     // }
+    
     public function logout(Request $request)
     {
         // Check if the user is authenticated

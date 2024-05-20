@@ -13,6 +13,16 @@ class VendorController extends Controller
         $vendor = Vendor::all();
         return view('Professional.showVendor', compact('vendor'));
     }
+    public function showdetails($id)
+    {
+        $vendor = Vendor::find($id);
+        if ($vendor) {
+            return response()->json($vendor);
+        } else {
+            return response()->json(['error' => 'Vendor not found'], 404);
+        }
+    }
+
     public function filter(Request $request)
     {
         $request->validate([
@@ -30,7 +40,6 @@ class VendorController extends Controller
     public function changeAccountStatus(Request $request)
     {
         // dd($request->all());
-       
         $VendorId = $request->input('vendor_id');
         $newStatus = $request->input('new_status');
         $remark = $request->input('remark');
@@ -38,11 +47,11 @@ class VendorController extends Controller
         if (!$Vendor) {
             return response()->json(['success' => false, 'message' => 'Customer not found'], 404);
         }
-        $Vendor->account_status = $newStatus;
-        if ($newStatus == 0 && !empty($remark)) {
+        $Vendor->account_status = $newStatus == "false" ? 0 : 1;
+        if ($newStatus == "false" && !empty($remark)) {
             $Vendor->deactivation_remark = $remark;
             $Vendor->deactivated_at = Carbon::now();
-        }else {
+        } else {
             $Vendor->deactivated_at = null;
             $Vendor->deactivation_remark = null;
         }

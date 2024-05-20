@@ -4,18 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Service;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 
 class ServiceController extends Controller
 {
     public function index()
-    {      
-         $services = Service::all();
-        return view('admin.all_services',compact('services'));
+    {
+        $services = Service::all();
+        return view('admin.all_services', compact('services'));
     }
     public function create()
-    {      
+    {
         return view('admin.create_services');
     }
     public function service_store(Request $request)
@@ -25,22 +24,21 @@ class ServiceController extends Controller
             'description' => 'required|string',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-    
+
         $service = new Service();
         $service->services_name = $validatedData['services_name'];
         $service->description = $validatedData['description'];
-    
-        if ($request->hasFile('image')) {
+
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
             $image = $request->file('image');
-            $imageName = time().'.'.$image->getClientOriginalExtension();
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('images/services'), $imageName);
             $service->image = 'images/services/' . $imageName;
         }
-    
+
         $service->save();
         return redirect()->route('service')->with('success', 'Service created successfully!');
     }
-
 
     public function filter(Request $request)
     {
@@ -57,43 +55,45 @@ class ServiceController extends Controller
         return view('admin.all_services', compact('services', 'start', 'end'));
     }
 
-    public function edit(Service $service)
-    { 
+    public function edit($id)
+    {   
+        $Did = decrypt($id);
+        $service = Service::find($Did);
         return view('admin.create_services', compact('service'));
     }
 
     public function update(Request $request, Service $service)
-{  
-    $validatedData = $request->validate([
-        'services_name' => 'required|string|max:255',
-        'description' => 'required|string',
-        'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-    ]);
-    // dd($request->all());
-    $service->update([
-        'services_name' => $validatedData['services_name'],
-        'description' => $validatedData['description'],
-        'status' => $request->input('status')??1,
-    ]);
-    if ($request->hasFile('image')) {
-        if ($service->image) {
-            $oldImagePath = public_path($service->image);
-            if (File::exists($oldImagePath)) {
-                File::delete($oldImagePath);
+    {
+        $validatedData = $request->validate([
+            'services_name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+        // dd($request->all());
+        $service->update([
+            'services_name' => $validatedData['services_name'],
+            'description' => $validatedData['description'],
+            'status' => $request->input('status') ?? 1,
+        ]);
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            if ($service->image) {
+                $oldImagePath = public_path($service->image);
+                if (File::exists($oldImagePath)) {
+                    File::delete($oldImagePath);
+                }
             }
+
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images/services'), $imageName);
+            $service->image = 'images/services/' . $imageName;
+
+            $service->save();
         }
 
-        $image = $request->file('image');
-        $imageName = time().'.'.$image->getClientOriginalExtension();
-        $image->move(public_path('images/services'), $imageName);
-        $service->image = 'images/services/' . $imageName;
-        
-        $service->save();
+        return redirect()->route('service')->with('success', 'Service updated successfully!');
     }
-
-    return redirect()->route('service')->with('success', 'Service updated successfully!');
-}
-public function destroy($id)
+    public function destroy($id)
     {
         $service = Service::find($id);
         if (!$service) {
@@ -101,8 +101,6 @@ public function destroy($id)
         }
 
         $service->delete();
-
-        return response()->json(['message' => 'Service soft deleted successfully'], 200);
+        return response()->json(['status' => true]);
     }
-
 }

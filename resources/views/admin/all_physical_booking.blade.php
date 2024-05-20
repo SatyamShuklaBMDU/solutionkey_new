@@ -102,13 +102,15 @@
             <div class="container-fluid plr_30 body_white_bg pt_30">
                 <div class="row justify-content-center">
                     <div class="col-lg-12 ">
-                        <div class="row mb" style="margin-bottom: 30px; margin-left: 5px;">
+                        <div class="row mb" style="margin-bottom: 50px; margin-left: 5px;">
                             <form action="{{ route('physical-filter') }}" method="post">
                                 @csrf
+                                <div class="row">
                               @include('admin.date')
-                                <div class="col-md-1 text-end" style="margin-left: 10px; margin-top: 47px;">
+                                <div class="col-sm-1" style="margin-top: 40px;">
                                     <a class="btn text-white shadow-lg" href="{{ route('physical-booking') }}"
                                         style="background-color:#033496;font-size:15px;">Reset</a>
+                                </div>
                                 </div>
                             </form>
                         </div>

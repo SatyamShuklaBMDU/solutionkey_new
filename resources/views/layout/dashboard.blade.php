@@ -25,7 +25,7 @@
                                   
                                      <!--end col-->
                                     
-                                         <div class="single_quick_activity shadow-lg">
+                                         <div class="single_quick_activity">
                                         <h4>User
                                             Management</h4>
                                         <h3> <span class="counter">5,79,000</span>
@@ -35,7 +35,7 @@
                                   
                                     <!--end col-->
                                    
-                                            <div class="single_quick_activity shadow-lg">
+                                            <div class="single_quick_activity">
                                         <h4>Service
                                             Management</h4>
                                         <h3> <span class="counter">79,000</span>
@@ -45,7 +45,7 @@
                                        
                                     <!--end col--> 
                                     
-                                             <div class="single_quick_activity shadow-lg">
+                                             <div class="single_quick_activity">
                                         <h4>Professional
                                             Management</h4>
                                         <h3> <span class="counter">92,000</span>
@@ -55,7 +55,7 @@
                                         
                                     <!--end col-->
                                  
-                                             <div class="single_quick_activity shadow-lg">
+                                             <div class="single_quick_activity">
                                         <h4>Customer
                                             Management</h4>
                                         <h3> <span class="counter">1,79,000</span>
@@ -65,7 +65,7 @@
                                         </div> 
                                     <!--end col-->
                                     
-                                            <div class="single_quick_activity shadow-lg">
+                                            <div class="single_quick_activity">
                                         <h4>Booking
                                             Scheduling</h4>
                                         <h3> <span class="counter">1,79,000</span>
@@ -75,7 +75,7 @@
                                             </div>
                                              <!--end col-->
                                       
-                                            <div class="single_quick_activity shadow-lg">
+                                            <div class="single_quick_activity">
                                         <h4>Booking
                                             Scheduling</h4>
                                         <h3> <span class="counter">1,79,000</span>
@@ -85,7 +85,7 @@
                                             </div>
                                                  <!--end col-->
                                      
-                                            <div class="single_quick_activity shadow-lg">
+                                            <div class="single_quick_activity">
                                         <h4>Payment &
                                             Invoicing</h4>
                                         <h3> <span class="counter">1,79,000</span>
@@ -95,7 +95,7 @@
                                             </div>
                                                     <!--end col-->
                                       
-                                            <div class="single_quick_activity shadow-lg">
+                                            <div class="single_quick_activity">
                                         <h4>Feedback &
                                             Reviews</h4>
                                         <h3> <span class="counter">1,79,000</span>
@@ -105,7 +105,7 @@
                                             </div>
                                                     <!--end col-->
                                       
-                                               <div class="single_quick_activity shadow-lg">
+                                               <div class="single_quick_activity">
                                         <h4>Analytics &
                                             Reporting</h4>
                                         <h3> <span class="counter">1,79,000</span>

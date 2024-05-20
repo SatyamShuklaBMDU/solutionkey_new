@@ -29,7 +29,7 @@
         @enderror
     </div>
 </div>
-<div class="col-md-1 text-end" style="margin-left: 10px; margin-top: 47px;">
+<div class="col-sm-1" style="margin-top: 40px;">
     <button class="btn text-white shadow-lg" type="submit"
         style="background-color:#033496;font-size:15px;">Filter</button>
 </div>

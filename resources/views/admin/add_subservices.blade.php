@@ -39,7 +39,7 @@
                         style="text-decoration: none;color:#0d9603 !important;font-weight:600;font-size:20px;">Services
                         Management</a></li>
                 <li class="breadcrumb-item active" aria-current="page"
-                    style="text-decoration: none;color:#033496;font-weight:600;font-size:18px;">Add Services</li>
+                    style="text-decoration: none;color:#033496;font-weight:600;font-size:18px;">Add Sub Services</li>
             </ol>
         </nav>
         <div class="main_content_iner ">
@@ -53,24 +53,26 @@
                 </div>
             @endif
             <div class="container-fluid">
-                <div class="row dashboard-header" style="">
-                    {{--  <div class="row">
-                        <div class="main-header">
-                            <h3 class="my-2 pl-4">Manage Services</h3>
-                        </div>
-                    </div>  --}}
+                <div class="row dashboard-header">
                     <div class="col-md-11  mx-auto">
-                        <form class="notification-form shadow rounded"
-                            action="{{ isset($service) ? route('services-update', $service->id) : url('services-store') }}"
+                        <form class="notification-form shadow rounded" action="{{ route('sub-service-store') }}"
                             method="post" enctype="multipart/form-data">
                             @csrf
-                            @if (isset($service))
-                                @method('PUT')
-                            @endif
+                            <div class="form-group">
+                                <label for="services">Choose Services</label>
+                                <select name="services" class="form-control" id="services">
+                                    <option selected disabled>Select Services</option>
+                                    @foreach ($services as $service)
+                                        <option value="{{ $service->id }}">{{ $service->services_name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('services')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
                             <div class="form-group">
                                 <label for="services_name">Service Name</label>
-                                <input type="text" name="services_name"
-                                    value="{{ old('services_name', isset($service) ? $service->services_name : '') }}"
+                                <input type="text" name="services_name" value="{{ old('services_name') }}"
                                     class="form-control" id="services_name" aria-describedby="textHelp"
                                     placeholder="Please enter your service name" style="font-size: 15px;">
                                 @error('services_name')
@@ -79,27 +81,12 @@
                             </div>
                             <div class="form-group">
                                 <label for="discriptions">Description</label>
-                                <input type="text" name="description"
-                                    value="{{ old('description', isset($service) ? $service->description : '') }}"
-                                    class="form-control" id="description" aria-describedby="textHelp"
-                                    placeholder="Please enter your description" style="font-size: 15px;">
+                                <textarea name="description" class="form-control" id="description" aria-describedby="textHelp"
+                                    placeholder="Please enter your description" style="font-size: 15px;">{{ old('description') }}</textarea>
                                 @error('description')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
-                            @if (isset($service) && ($service->status === 1 || $service->status === 0))
-                                <div class="form-group">
-                                    <label for="status">Status</label>
-                                    <select name="status" id="status" class="form-control" style="font-size: 15px;">
-                                        <option value="1"
-                                            {{ old('status', $service->status) == '1' ? 'selected' : '' }}>Active
-                                        </option>
-                                        <option value="0"
-                                            {{ old('status', $service->status) == '0' ? 'selected' : '' }}>Block
-                                        </option>
-                                    </select>
-                                </div>
-                            @endif
                             <div class="form-group">
                                 <label for="image">Image</label>
                                 <div class="input-group">
@@ -110,16 +97,10 @@
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
-                            @if (isset($service) && $service->image)
-                                <div>
-                                    <img src="{{ asset($service->image) }}" alt="Service Image"
-                                        style="width: 200px; height: 150px;">
-                                </div>
-                            @endif
-                            <button type="submit" class="btn btn-info text-danger text-bold shadow"
-                                style="margin:30px 0px 0px;"><a href="{{ route('service') }}"
+                            <button type="button" class="btn btn-info text-danger   text-bold shadow btn-lg "
+                                style="margin:30px 0px 0px;"><a href="{{ route('sub-service') }}"
                                     style="text-decoration: none;color:white;font-weight:500">Back</a></button>
-                            <button type="submit" class="btn btn-success"
+                            <button type="submit" class="btn btn-success btn-lg"
                                 style="margin:30px 0px 0px;font-weight:500;">Submit</button>
                         </form>
                     </div>
