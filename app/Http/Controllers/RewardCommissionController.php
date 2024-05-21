@@ -42,16 +42,14 @@ class RewardCommissionController extends Controller
 
     public function update(Request $request, RewardCommission $reward)
     {
-
+        // dd($request->all());
         $validatedData = $request->validate([
             'reward_type' => 'required|string|max:255',
             'reward_amount' => 'required',
         ], [
             'reward_type.unique' => 'The reward type is already in use.',
         ]);
-
         $existingRecord = RewardCommission::where('reward_type', $validatedData['reward_type'])->first();
-
         if ($existingRecord) {
             $existingRecord->update(['reward_amount' => $validatedData['reward_amount']]);
         }

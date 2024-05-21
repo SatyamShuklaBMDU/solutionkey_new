@@ -26,55 +26,11 @@
         .main_content .main_content_iner {
             margin: 0px !important;
         }
-
-        #customerTable {
-            font-size: 16px;
-            /* Adjust the font size as needed */
-        }
-
         .dt-button {
             background-color: #033496 !important;
             color: white !important;
         }
-
-        .dataTables_wrapper .dataTables_paginate .paginate_button {
-            font-size: 14px;
-            padding: 5px 10px;
-            white-space: nowrap;
-        }
-
-        #customerTable_previous {
-            transform: translateX(-20px);
-        }
-
-        /* For DataTable */
-        #customerTable_wrapper, #customerTable th, #customerTable td {
-            font-size: 15px;
-        }
-
-        /* For datepicker */
-        .ui-datepicker {
-            font-size: 15px;
-        }
-        /* For input placeholder */
-        ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-            font-size: 15px;
-        }
-        ::-moz-placeholder { /* Firefox 19+ */
-            font-size: 15px;
-        }
-        :-ms-input-placeholder { /* IE 10+ */
-            font-size: 15px;
-        }
-        :-moz-placeholder { /* Firefox 18- */
-            font-size: 15px;
-        }
     </style>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
 @endsection
 
 @section('content-area')
@@ -108,25 +64,25 @@
                                     <table id="customerTable" class="display nowrap" style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th>S no.</th>
-                                                <th>Posting Date</th>
-                                                <th>Person Id</th>
-                                                <th>Person Name</th>
-                                                <th>Content</th>
-                                                <th>Media</th>
-                                                <th>Status</th>
+                                                <th class="text-center">S no.</th>
+                                                <th class="text-center">Posting Date</th>
+                                                <th class="text-center">Person Id</th>
+                                                <th class="text-center">Person Name</th>
+                                                <th class="text-center">Content</th>
+                                                <th class="text-center">Media</th>
+                                                <th class="text-center">Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($blog as $blogs)
                                                 <tr data-blog-id="{{ $blogs->id }}">
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ date('d-m-Y', strtotime($blogs->created_at)) }}</td>
-                                                    <td>{{ $blogs->vendor->vendor_id }}</td>
-                                                    <td>{{ $blogs->vendor->name }}</td>
-                                                    <td>{{ $blogs->content }}</td>
-                                                    <td><img src="{{ asset($blogs->blog_media) }}" width="50px" height="50px" alt=""></td>
-                                                    <td class="text-success">Approved</td>
+                                                    <td class="text-center">{{ $loop->iteration }}</td>
+                                                    <td class="text-center">{{ date('d-m-Y', strtotime($blogs->created_at)) }}</td>
+                                                    <td class="text-center">{{ $blogs->vendor->vendor_id }}</td>
+                                                    <td class="text-center">{{ $blogs->vendor->name }}</td>
+                                                    <td class="text-center">{{ $blogs->content }}</td>
+                                                    <td class="text-center"><a href="{{asset($blogs->blog_media)}}" target="_blank" rel="noopener noreferrer"><img src="{{ asset($blogs->blog_media) }}" width="50px" height="50px" alt=""></a></td>
+                                                    <td class="text-success text-center">Approved</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -142,16 +98,6 @@
 @endsection
 
 @section('script-area')
-    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         $(document).ready(function() {
             $('#customerTable').DataTable({
@@ -159,19 +105,6 @@
                 buttons: [
                     'copy', 'csv', 'excel', 'pdf', 'print'
                 ]
-            });
-        });
-        $(function() {
-            $('#datepickerFrom').datepicker({
-                format: 'dd-mm-yyyy',
-                autoclose: true,
-                todayHighlight: true,
-            });
-
-            $('#datepickerTo').datepicker({
-                format: 'dd-mm-yyyy',
-                autoclose: true,
-                todayHighlight: true,
             });
         });
     </script>

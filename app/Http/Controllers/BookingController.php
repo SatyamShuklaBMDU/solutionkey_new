@@ -9,11 +9,11 @@ class BookingController extends Controller
 {
     public function online_booking()
     {
-        $schedule_slots = ScheduleSlot::all();
+        $schedule_slots = ScheduleSlot::where('type','online')->get();
         return view('admin.all_online_booking',compact('schedule_slots'));
     }
     public function physical_booking(){
-        $schedule_slots = ScheduleSlot::all();
+        $schedule_slots = ScheduleSlot::where('type','physical')->get();
         return view('admin.all_physical_booking',compact('schedule_slots'));
     }
 

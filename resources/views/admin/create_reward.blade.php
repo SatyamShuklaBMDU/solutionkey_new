@@ -33,10 +33,13 @@
 @section('content-area')
     {{-- section content --}}
     <section class="main_content dashboard_part">
-        <nav aria-label="breadcrumb" class="mb-5">
+        <nav aria-label="breadcrumb" class="mb-2">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Reward & Commission Management</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Add Reward & Commission</li>
+                <li class="breadcrumb-item"><a href="#"
+                        style="text-decoration: none;color:#0d9603 !important;font-weight:600;font-size:20px;">Reward &
+                        Commission </a></li>
+                <li class="breadcrumb-item active" aria-current="page"
+                    style="text-decoration: none;color:#033496;font-weight:600;font-size:18px;">Add Reward & Commission</li>
             </ol>
         </nav>
         <div class="main_content_iner ">
@@ -50,20 +53,12 @@
                 </div>
             @endif
             <div class="container-fluid">
-                <div class="row dashboard-header" style="background: #e5e5e5;">
-                    <div class="row">
-                        <div class="main-header">
-                            <h3 class="my-2 pl-4">Manage Reward & Commission</h3>
-                        </div>
-                    </div>
-                    <div class="col-md-6  mx-auto">
+                <div class="row dashboard-header">
+                    <div class="col-md-11  mx-auto">
                         <form class="notification-form shadow rounded"
-                            action="{{ isset($reward) ? route('reward-update', $reward->id) : route('reward-store') }}"
+                            action="{{route('reward-store') }}"
                             method="post" enctype="multipart/form-data">
                             @csrf
-                            @if (isset($reward))
-                                @method('PUT')
-                            @endif
                             <div class="form-group">
                                 <label for="reward_type">Reward Type</label>
                                 <input type="text" name="reward_type"
@@ -74,7 +69,7 @@
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="form-group">
+                            <div class="form-group mt-3">
                                 <label for="reward_amount">Reward Amounts</label>
                                 <input type="number" name="reward_amount"
                                     value="{{ old('reward_amount', isset($reward) ? $reward->reward_amount : '') }}"
@@ -84,8 +79,8 @@
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <button type="submit" class="btn btn-info text-danger   text-bold shadow btn-lg " style="margin:30px 0px 0px;"><a href="{{ route('reward-commission') }}">Back</a></button>
-                            <button type="submit" class="btn btn-dark btn-lg" style="margin:30px 0px 0px;">Submit</button>
+                            <a class="btn btn-info shadow-lg" style="text-decoration: none;color:white;margin:30px 0px 0px;" href="{{ route('reward-commission') }}">Back</a>
+                            <button type="submit" class="btn btn-dark shadow-lg" style="margin:30px 0px 0px;">Submit</button>
                         </form>
                     </div>
                 </div>

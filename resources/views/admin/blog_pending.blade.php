@@ -36,53 +36,18 @@
             background-color: #033496 !important;
             color: white !important;
         }
-
-        .dataTables_wrapper .dataTables_paginate .paginate_button {
-            font-size: 14px;
-            padding: 5px 10px;
-            white-space: nowrap;
-        }
-
-        #customerTable_previous {
-            transform: translateX(-20px);
-        }
-
-        /* For DataTable */
-        #customerTable_wrapper, #customerTable th, #customerTable td {
-            font-size: 15px;
-        }
-
-        /* For datepicker */
-        .ui-datepicker {
-            font-size: 15px;
-        }
-        /* For input placeholder */
-        ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-            font-size: 15px;
-        }
-        ::-moz-placeholder { /* Firefox 19+ */
-            font-size: 15px;
-        }
-        :-ms-input-placeholder { /* IE 10+ */
-            font-size: 15px;
-        }
-        :-moz-placeholder { /* Firefox 18- */
-            font-size: 15px;
-        }
     </style>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
 @endsection
 
 @section('content-area')
     <section class="main_content dashboard_part">
         <nav aria-label="breadcrumb" class="mb-5">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#" style="text-decoration: none;color:#0d9603 !important;font-weight:600;font-size:20px;">Blog Management</a></li>
-                <li class="breadcrumb-item active" aria-current="page" style="text-decoration: none;color:#033496 !important;font-weight:600;font-size:18px;">Pending Blog</li>
+                <li class="breadcrumb-item"><a href="#"
+                        style="text-decoration: none;color:#0d9603 !important;font-weight:600;font-size:20px;">Blog
+                        Management</a></li>
+                <li class="breadcrumb-item active" aria-current="page"
+                    style="text-decoration: none;color:#033496 !important;font-weight:600;font-size:18px;">Pending Blog</li>
             </ol>
         </nav>
         <div class="main_content_iner">
@@ -93,11 +58,11 @@
                             <form action="{{ route('blog-pending-filter') }}" method="post">
                                 @csrf
                                 <div class="row">
-                                @include('admin.date')
-                                <div class="col-sm-1 text-end" style="margin-top: 40px;">
-                                    <a class="btn text-white shadow-lg" href="{{ route('blog-pending') }}"
-                                        style="background-color:#033496;font-size:15px;">Reset</a>
-                                </div>
+                                    @include('admin.date')
+                                    <div class="col-sm-1 text-end" style="margin-top: 40px;">
+                                        <a class="btn text-white shadow-lg" href="{{ route('blog-pending') }}"
+                                            style="background-color:#033496;font-size:15px;">Reset</a>
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -108,33 +73,41 @@
                                     <table id="customerTable" class="display nowrap" style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th>S no.</th>
-                                                <th>Media</th>
-                                                <th>Posting Date</th>
-                                                <th>Person Id</th>
-                                                <th>Person</th>
-                                                <th>Content</th>
-                                                <th>Status</th>
-                                                <th>Remark</th>
+                                                <th class="text-center">S no.</th>
+                                                <th class="text-center">Media</th>
+                                                <th class="text-center">Posting Date</th>
+                                                <th class="text-center">Person Id</th>
+                                                <th class="text-center">Person</th>
+                                                <th class="text-center">Content</th>
+                                                <th class="text-center">Status</th>
+                                                <th class="text-center">Remark</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($blog as $blogs)
                                                 <tr data-blog-id="{{ $blogs->id }}">
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td><img src="{{ asset($blogs->blog_media) }}" width="100px" height="100px" alt=""></td>
-                                                    <td>{{ date('d-m-Y', strtotime($blogs->created_at)) }}</td>
-                                                    <td>{{ $blogs->vendor->vendor_id }}</td>
-                                                    <td>{{ $blogs->vendor->name }}</td>
-                                                    <td>{{ $blogs->content }}</td>
-                                                    <td>
-                                                        <select class="form-select change-status-dropdown" data-blog-id="{{ $blogs->id }}" style="font-size: 15px;">
+                                                    <td class="text-center">{{ $loop->iteration }}</td>
+                                                    <td class="text-center"><a href="{{ asset($blogs->blog_media) }}" target="_blank"
+                                                            rel="noopener noreferrer"><img
+                                                                src="{{ asset($blogs->blog_media) }}" width="50px"
+                                                                height="50px" alt=""></a></td>
+                                                    <td class="text-center">{{ date('d-m-Y', strtotime($blogs->created_at)) }}</td>
+                                                    <td class="text-center">{{ $blogs->vendor->vendor_id }}</td>
+                                                    <td class="text-center">{{ $blogs->vendor->name }}</td>
+                                                    <td class="text-center">{{ $blogs->content }}</td>
+                                                    <td class="text-center">
+                                                        <select class="form-select change-status-dropdown"
+                                                            data-blog-id="{{ $blogs->id }}" style="font-size: 15px;">
                                                             <option value="" selected disabled>Choose</option>
-                                                            <option value="-1" {{ $blogs->status == -1 ? 'selected' : '' }}>Reject</option>
-                                                            <option value="1" {{ $blogs->status == 1 ? 'selected' : '' }}>Approve</option>
+                                                            <option value="-1"
+                                                                {{ $blogs->status == -1 ? 'selected' : '' }}>Reject
+                                                            </option>
+                                                            <option value="1"
+                                                                {{ $blogs->status == 1 ? 'selected' : '' }}>Approve
+                                                            </option>
                                                         </select>
                                                     </td>
-                                                    <td>
+                                                    <td class="text-center">
                                                         @if ($blogs->status == -1)
                                                             {{ $blogs->status_remark ?? '' }}
                                                         @else
@@ -156,73 +129,132 @@
 @endsection
 
 @section('script-area')
-    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         $(document).ready(function() {
             $('.change-status-dropdown').change(function() {
                 var blogID = $(this).data('blog-id');
                 var newStatus = $(this).val();
-                var remark = '';
+
                 if (newStatus == -1) {
-                    remark = prompt("Please enter the reason for Rejection:", "");
-                    if (remark === null) {
-                        return;
-                    }
-                }
-                $.ajax({
-                    url: "{{ route('change.blog.status') }}",
-                    method: 'POST',
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        blog_id: blogID,
-                        new_status: newStatus,
-                        remark: remark,
-                    },
-                    success: function(response) {
-                        alert('Account status Changed');
-                        location.reload();
-                        console.log(response);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
-                    }
-                });
-            });
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-            $('.delete-location').click(function(event) {
-                event.preventDefault();
-                var CustomerId = $(this).closest('tr').attr('data-customer-id');
-                if (confirm('Are you sure you want to delete this Number?')) {
+                    Swal.fire({
+                        title: 'Reject Blog',
+                        input: 'text',
+                        inputLabel: 'Please enter the reason for Rejection:',
+                        inputPlaceholder: 'Enter your reason here...',
+                        showCancelButton: true,
+                        confirmButtonText: 'Submit',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            var remark = result.value;
+                            $.ajax({
+                                url: "{{ route('change.blog.status') }}",
+                                method: 'POST',
+                                data: {
+                                    _token: "{{ csrf_token() }}",
+                                    blog_id: blogID,
+                                    new_status: newStatus,
+                                    remark: remark,
+                                },
+                                success: function(response) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Success',
+                                        text: 'Account status Changed',
+                                    }).then(() => {
+                                        location.reload();
+                                    });
+                                },
+                                error: function(xhr, status, error) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: 'An error occurred while changing the status.',
+                                    });
+                                    console.error(xhr.responseText);
+                                }
+                            });
+                        }
+                    });
+                } else {
                     $.ajax({
-                        url: '/delete-customer/' + CustomerId,
-                        type: 'DELETE',
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        url: "{{ route('change.blog.status') }}",
+                        method: 'POST',
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            blog_id: blogID,
+                            new_status: newStatus,
                         },
                         success: function(response) {
-                            alert('Deleted successfully');
-                            location.reload();
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'Account status Changed',
+                            }).then(() => {
+                                location.reload();
+                            });
                         },
                         error: function(xhr, status, error) {
-                            alert('Error deleting Number:', error);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'An error occurred while changing the status.',
+                            });
+                            console.error(xhr.responseText);
                         }
                     });
                 }
             });
         });
     </script>
+
+    <script>
+        $(document).ready(function() {
+            $('.delete-location').click(function(event) {
+                event.preventDefault();
+                var CustomerId = $(this).closest('tr').attr('data-customer-id');
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Do you want to delete this Number?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/delete-customer/' + CustomerId,
+                            type: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function(response) {
+                                Swal.fire(
+                                    'Deleted!',
+                                    'Number has been deleted.',
+                                    'success'
+                                ).then(() => {
+                                    location.reload();
+                                });
+                            },
+                            error: function(xhr, status, error) {
+                                Swal.fire(
+                                    'Error!',
+                                    'An error occurred while deleting the Number.',
+                                    'error'
+                                );
+                                console.error(xhr.responseText);
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
     <script>
         $(document).ready(function() {
             $('#customerTable').DataTable({
@@ -232,6 +264,7 @@
                 ]
             });
         });
+
         $(function() {
             $('#datepickerFrom').datepicker({
                 format: 'dd-mm-yyyy',

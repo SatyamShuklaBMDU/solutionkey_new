@@ -56,24 +56,23 @@
             transform: translateX(-20px);
         }
     </style>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
+    <!-- Toastr CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <!-- SweetAlert CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 @endsection
+
 @section('content-area')
     <section class="main_content dashboard_part">
-        <nav aria-label="breadcrumb" class="mb-5">
+        <nav aria-label="breadcrumb" class="mb-2">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#" style="text-decoration: none;color:#0d9603 !important;font-weight:600;font-size:20px;">Reward & Commission Management</a></li>
-                <li class="breadcrumb-item active" aria-current="page" style="text-decoration: none;color:#033496;font-weight:600;font-size:18px;">All Reward & Commission</li>
+                <li class="breadcrumb-item"><a href="#"
+                        style="text-decoration: none;color:#0d9603 !important;font-weight:600;font-size:20px;">Reward &
+                        Commission </a></li>
+                <li class="breadcrumb-item active" aria-current="page"
+                    style="text-decoration: none;color:#033496;font-weight:600;font-size:18px;">All Reward & Commission</li>
             </ol>
         </nav>
-        @if (session()->has('success'))
-            <div class="alert alert-success">
-                {{ session()->get('success') }}
-            </div>
-        @endif
         <div class="main_content_iner">
             <div class="container-fluid plr_30 body_white_bg pt_30">
                 <div class="row justify-content-center">
@@ -82,50 +81,49 @@
                             <form action="{{ route('reward-filter') }}" method="post">
                                 @csrf
                                 <div class="row">
-                                @include('admin.date')
-                                <div class="col-sm-1" style="margin-top: 40px;">
-                                    <a class="btn text-white shadow-lg" href="{{ route('reward-commission') }}"
-                                        style="background-color:#033496;">Reset</a>
-                                </div>
-                                <div class="col-sm-3 text-end"  style="margin-top: 40px;">
-                                    <a class="btn text-white shadow-lg" href="{{ route('reward-create') }}"
-                                        style="background-color:#0d9603;">Create New Reward</a>
-                                </div>
+                                    @include('admin.date')
+                                    <div class="col-sm-1" style="margin-top: 40px;">
+                                        <a class="btn text-white shadow-lg" href="{{ route('reward-commission') }}"
+                                            style="background-color:#033496;">Reset</a>
+                                    </div>
+                                    <div class="col-sm-3 text-end" style="margin-top: 40px;">
+                                        <a class="btn text-white shadow-lg" href="{{ route('reward-create') }}"
+                                            style="background-color:#033496;">Create New Reward</a>
+                                    </div>
                                 </div>
                             </form>
                         </div>
-                        
-                 <!-- Table -->
                         <div class="card">
                             <div class="card-body">
                                 <table id="customerTable" class="display nowrap" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th>S No.</th>
-                                            <th> Date</th>
-                                            <th>Reward Type</th>
-                                            <th>Reward Amount</th>
-                                            <th>Action</th>
+                                            <th class="text-center">S No.</th>
+                                            <th class="text-center"> Date</th>
+                                            <th class="text-center">Reward Type</th>
+                                            <th class="text-center">Reward Amount</th>
+                                            <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($reward_commissions as $reward)
-                                            <tr class="odd" data-user-id="{{ $reward->id }}">
-                                                <td class="sorting_1">{{ $loop->iteration }}</td>
-                                                <td>{{ \Carbon\Carbon::parse($reward->created_at)->format('d M,Y') }}
-                                                </td>
-                                                <td>{{ $reward->reward_type }}</td>
-                                                <td>{{ $reward->reward_amount }}</td>
-                                                <td class="action">
-                                                    <button type="button" class="btn btn-outline-danger">
-                                                        <i class="fa fa-trash-o delete-location" data-reward-id="{{ $reward->id }}"
+                                            <tr class="odd" data-reward-id="{{ $reward->id }}">
+                                                <td class="text-center">{{ $loop->iteration }}</td>
+                                                <td class="text-center">
+                                                    {{ \Carbon\Carbon::parse($reward->created_at)->format('d M,Y') }}</td>
+                                                <td class="text-center">{{ $reward->reward_type }}</td>
+                                                <td class="text-center">{{ $reward->reward_amount }}</td>
+                                                <td class="text-center">
+                                                    <button type="button" class="btn btn-outline-danger delete-reward"
+                                                        data-reward-id="{{ $reward->id }}">
+                                                        <i class="fa fa-trash-o"
                                                             style="padding-right: -10px;font-size: 17px;"></i>
                                                     </button>
-                                                    <button type="button" class="btn btn-outline-danger">
-                                                        <a href="{{ route('reward-edit', $reward->id) }}">
-                                                            <i class="fa fa-pencil"
+                                                    <button type="button" class="btn btn-outline-danger edit-reward"
+                                                        data-reward-id="{{ $reward->id }}" data-bs-toggle="modal"
+                                                        data-bs-target="#editRewardModal">
+                                                        <i class="fa fa-pencil"
                                                             style="padding-right: -10px;font-size: 17px;"></i>
-                                                        </a>
                                                     </button>
                                                 </td>
                                             </tr>
@@ -138,69 +136,96 @@
                 </div>
             </div>
         </div>
-    </section>
-@endsection
-@section('script-area')
-    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0-alpha1/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $("#alluser").click(function() {
-                $("input[type=checkbox]").prop('checked', $(this).prop('checked'));
-            });
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-            $('.delete-location').click(function(event) {
-                event.preventDefault();
-                var rewardId = $(this).data('reward-id');
-                if (confirm('Are you sure you want to delete this reward?')) {
-                    $.ajax({
-                        url: '{{ route('delete-reward', '') }}' + '/' + rewardId, // Add slash before appending the rewardId
-                        type: 'GET',
-                        success: function(response) {
-                            alert('Reward deleted successfully');
-                            location.reload();
-                        },
-                        error: function(xhr, status, error) {
-                            alert('Error deleting service: ' + error);
+        <!-- Edit Reward Modal -->
+        <div class="modal fade" id="editRewardModal" tabindex="-1" aria-labelledby="editRewardModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editRewardModalLabel">Edit Reward</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form id="editRewardForm" method="post">
+                        @csrf
+                        @method('PUT')
+                        <div class="modal-body">
+                            <input type="hidden" name="reward_id" id="editRewardId">
+                            <div class="mb-3">
+                                <label for="editRewardType" class="form-label">Reward Type</label>
+                                <input type="text" class="form-control" readonly id="editRewardType" name="reward_type" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editRewardAmount" class="form-label">Reward Amount</label>
+                                <input type="number" class="form-control" id="editRewardAmount" name="reward_amount"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endsection
+
+    @section('script-area')
+        <script>
+            $(document).ready(function() {
+                $('#customerTable').DataTable({
+                    dom: 'Bfrtip',
+                    buttons: [
+                        'copy', 'csv', 'excel', 'pdf', 'print'
+                    ]
+                });
+                @if (session()->has('success'))
+                    toastr.success('{{ session('success') }}');
+                @endif
+                $('.edit-reward').click(function() {
+                    var rewardId = $(this).data('reward-id');
+                    var rewardType = $(this).closest('tr').find('td:eq(2)').text();
+                    var rewardAmount = $(this).closest('tr').find('td:eq(3)').text();
+                    $('#editRewardId').val(rewardId);
+                    $('#editRewardType').val(rewardType);
+                    $('#editRewardAmount').val(rewardAmount);
+                    $('#editRewardForm').attr('action', '{{ url('reward-update') }}/' + rewardId);
+                });
+                $('.delete-reward').click(function(event) {
+                    event.preventDefault();
+                    var rewardId = $(this).data('reward-id');
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url: '{{ route('delete-reward', '') }}' + '/' + rewardId,
+                                type: 'GET',
+                                success: function(response) {
+                                    Swal.fire(
+                                        'Deleted!',
+                                        'Reward has been deleted.',
+                                        'success'
+                                    );
+                                    location.reload();
+                                },
+                                error: function(xhr, status, error) {
+                                    Swal.fire(
+                                        'Error!',
+                                        'An error occurred while deleting the reward.',
+                                        'error'
+                                    );
+                                }
+                            });
                         }
                     });
-                }
+                });
             });
-        });
-    </script>
-    
-    <script>
-        $(document).ready(function() {
-            $('#customerTable').DataTable({
-                dom: 'Bfrtip',
-                buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
-                ]
-            });
-        });
-        $(function() {
-            $('#datepickerFrom').datepicker({
-                format: 'dd-mm-yyyy',
-                autoclose: true,
-                todayHighlight: true,
-            });
-
-            $('#datepickerTo').datepicker({
-                format: 'dd-mm-yyyy',
-                autoclose: true,
-                todayHighlight: true,
-            });
-        });
-    </script>
-@endsection
+        </script>
+    @endsection

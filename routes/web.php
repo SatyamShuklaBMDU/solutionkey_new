@@ -154,7 +154,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/reward/commission/create', [RewardCommissionController::class, 'create'])->name('reward-create');
     Route::post('/reward/commission/store', [RewardCommissionController::class, 'store'])->name('reward-store');
     Route::get('/reward/commission/edit/{reward}', [RewardCommissionController::class, 'edit'])->name('reward-edit');
-    Route::put('/reward/commission/{service}', [RewardCommissionController::class, 'update'])->name('reward-update');
+    Route::put('reward-update/{service}', [RewardCommissionController::class, 'update'])->name('reward-update');
     Route::post('/reward/filter', [RewardCommissionController::class, 'filter'])->name('reward-filter');
     Route::get('/delete-reward/{id}', [RewardCommissionController::class, 'destroy'])->name('delete-reward');
 });
