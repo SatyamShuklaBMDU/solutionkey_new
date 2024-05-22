@@ -76,4 +76,22 @@ class FeedbackController extends Controller
             return response()->json(['message' => 'failed', 'status' => false], 200);
         }
     }
+    public function GetFeedback(){
+        $feedback = Feedback::where('customer_id',Auth::id())->get();
+        if($feedback){
+            return response()->json(['status' => true, 'message' => 'Feedback get successfully', 'feedback' => $feedback],200);
+        }
+        else{
+        return response()->json(['status' => false, 'message' => 'Feedback not found'],400);
+        }
+    }
+    public function Getcomplaint(){
+        $complaint = Complaint::where('customer_id',Auth::id())->get();
+        if($complaint){
+            return response()->json(['status' => true, 'message' => 'Complaint get successfully', 'complaint' => $complaint],200);
+        }
+        else{
+        return response()->json(['status' => false, 'message' => 'Complaint not found'],400);
+        }
+    }
 }

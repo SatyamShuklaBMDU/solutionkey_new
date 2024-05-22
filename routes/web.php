@@ -19,6 +19,8 @@ use App\Http\Controllers\VendorController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\VendorComplaintController;
+use App\Http\Controllers\VendorFeedbackController;
 
 /*
 |--------------------------------------------------------------------------
@@ -97,14 +99,24 @@ Route::middleware('auth')->group(function () {
         Route::get('/api/get-vendor-details/{id}', [VendorController::class,'showdetails']);
         Route::post('/vendor/filter', [VendorController::class, 'filter'])->name('vendor-filter');
     });
-    // FeedBack Route
+     // FeedBack Route
     Route::get('/feedback', [FeedbackController::class, 'index'])->name('feedback');
-    Route::post('/feedback/filter', [FeedbackController::class, 'filter'])->name('feedback-filter');
+    Route::get('/vendor-feedback', [VendorFeedbackController::class, 'index'])->name('vendor-feedback');
+    Route::post('/vendor-feedback/filter',[VendorFeedbackController::class,'filter'])->name('vendor-feedback-filter');
+    Route::delete('/vendor-delete-feedback/{id}', [VendorFeedbackController::class, 'destroy'])->name('vendor-delete-feedback');
+    Route::post('/feedback/filter',[FeedbackController::class,'filter'])->name('feedback-filter');
     Route::delete('/delete-feedback/{id}', [FeedbackController::class, 'destroy'])->name('delete-feedback');
+    Route::post('/vendor-feedback-reply',[VendorFeedbackController::class,'reply'])->name('vendor-feedback-reply');
+    Route::post('/feedback-reply',[FeedbackController::class,'reply'])->name('feedback-reply');
     // Complaint Route
     Route::get('/complaint', [ComplaintController::class, 'index'])->name('complaint');
-    Route::post('/complaint/filter', [ComplaintController::class, 'filter'])->name('complaint-filter');
+    Route::post('/complaint/filter',[ComplaintController::class,'filter'])->name('complaint-filter');
     Route::delete('/delete-complaint/{id}', [ComplaintController::class, 'destroy'])->name('delete-complaint');
+    Route::get('/vendor-complaint', [VendorComplaintController::class, 'index'])->name('vendor-complaint');
+    Route::post('/vendor-complaint/filter',[VendorComplaintController::class,'filter'])->name('vendor-complaint-filter');
+    Route::delete('/vendor-delete-complaint/{id}', [VendorComplaintController::class, 'destroy'])->name('vendor-delete-complaint');
+    Route::post('/vendor-complaint-reply',[VendorComplaintController::class,'reply'])->name('vendor-complaint-reply');
+    Route::post('/complaint-reply',[ComplaintController::class,'reply'])->name('complaint-reply');
     //Service Route
     Route::get('/sub-service', [SubServicesController::class, 'index'])->name('sub-service');
     Route::post('/sub-services-store', [SubServicesController::class, 'store'])->name('sub-service-store');

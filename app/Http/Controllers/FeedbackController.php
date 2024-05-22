@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Feedback;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class FeedbackController extends Controller
 {
@@ -32,5 +33,20 @@ class FeedbackController extends Controller
         $feedback = Feedback::findOrFail($id);
         $feedback->delete();
         return response()->json(['success'=>'Deleted Successfully']);
+    }
+    public function reply(Request $request)
+    {
+        $feedback_reply = feedback::find($request->feedbackId);
+        $validator = Validator::make($request->all(), [
+            'feedbackId' => 'required|exists:feedback,id',
+            'reply' => 'required|string'
+        ]);
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+        $feedback_reply->reply = $request->reply;
+        $feedback_reply->reply_date = now();
+        $feedback_reply->save();
+        return redirect('/feedback')->with('successs', 'Reply Successfully!');
     }
 }

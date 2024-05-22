@@ -35,39 +35,26 @@
         .main_content .main_content_iner {
             margin: 0px !important;
         }
-
-        #customerTable {
-            font-size: 16px;
-            /* Adjust the font size as needed */
-        }
-
         .dt-button {
             background-color: #033496 !important;
             color: white !important;
         }
-
-        .dataTables_wrapper .dataTables_paginate .paginate_button {
-            font-size: 14px;
-            padding: 5px 10px;
-            white-space: nowrap;
-        }
-
-        #customerTable_previous {
-            transform: translateX(-20px);
-        }
     </style>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
-    
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
 @endsection
 @section('content-area')
+    @if (session('successs'))
+        <div id="flash-message" style="display: none;">
+            {{ session('successs') }}
+        </div>
+    @endif
     <section class="main_content dashboard_part">
-        <nav aria-label="breadcrumb" class="mb-5">
+        <nav aria-label="breadcrumb" class="mb-2">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#" style="text-decoration: none;color:#0d9603 !important;font-weight:600;font-size:20px;">Complaint Management</a></li>
-                <li class="breadcrumb-item active" aria-current="page" style="text-decoration: none;color:#033496;font-weight:600;font-size:18px;">All Complaint</li>
+                <li class="breadcrumb-item"><a href="#"
+                        style="text-decoration: none;color:#0d9603 !important;font-weight:600;font-size:20px;">Complaint
+                        Management</a></li>
+                <li class="breadcrumb-item active" aria-current="page"
+                    style="text-decoration: none;color:#033496;font-weight:600;font-size:18px;">Users Complaint</li>
             </ol>
         </nav>
         @if (session()->has('success'))
@@ -79,15 +66,15 @@
             <div class="container-fluid plr_30 body_white_bg pt_30">
                 <div class="row justify-content-center">
                     <div class="col-lg-12 ">
-                        <div class="row mb" style="margin-bottom: 50px; margin-left: 5px;">
+                        <div class="row mb" style="margin-bottom: 30px; margin-left: 5px;">
                             <form action="{{ route('complaint-filter') }}" method="post">
                                 @csrf
                                 <div class="row">
-                                @include('admin.date')
-                                <div class="col-sm-1 text-end" style="margin-top: 40px;">
-                                    <a class="btn text-white shadow-lg" href="{{ route('complaint') }}"
-                                        style="background-color:#033496;">Reset</a>
-                                </div>
+                                    @include('admin.date')
+                                    <div class="col-sm-1 text-end" style="margin-top: 40px;">
+                                        <a class="btn text-white shadow-lg" href="{{ route('complaint') }}"
+                                            style="background-color:#033496;">Reset</a>
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -103,26 +90,40 @@
                                             <th> Name</th>
                                             <th>Subject</th>
                                             <th>Message</th>
-                                            {{-- <th>User Name</th> --}}
+                                            <th>Reply Date</th>
+                                            <th>Reply</th>
+                                            {{-- <th>Reply Btn</th> --}}
                                             <th>Action</th>
+                                            {{-- <th>User Name</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($complaint as $user)
                                             <tr class="odd" data-user-id="{{ $user->id }}">
-                                                <td  class="sorting_1">{{ $loop->iteration }}</td>
+                                                <td class="sorting_1">{{ $loop->iteration }}</td>
                                                 <td>{{ \Carbon\Carbon::parse($user->created_at)->format('d M,Y') }}
                                                 </td>
-                                                <td>{{ $user->customer->customers_id}}</td>
-                                                <td>{{ $user->customer->name }}</td>
-                                                <td>{{ $user->message }}</td>
+                                                <td>{{ $user->customer->customers_id ?? '' }}</td>
+                                                <td>{{ $user->customer->name ?? '' }}</td>
+                                                {{-- <td>{{ $user->message }}</td> --}}
                                                 <td>{{ $user->subject }}</td>
-                                                <td class="action">
-                                                    <button type="button" class="btn btn-outline-danger">
-                                                        <i class="fa fa-trash-o delete-location"
-                                                            style="padding-right: -10px;font-size: 17px;"></i>
-                                                    </button>
-                                                    
+                                                <td>{{ $user->message }}</td>
+                                                <td>{{ $user->reply_date }}</td>
+                                                <td>{{ $user->reply }}</td>
+                                                <td class="d-flex">
+                                                    <div class="d-flex">
+                                                        <a href="#"
+                                                            class="btn btn-success shadow btn-1x sharp me-1 reply-btn"
+                                                            data-complaint-id="{{ $user->id }}" data-bs-toggle="modal"
+                                                            data-bs-target="#basicModal">Reply
+                                                        </a>
+                                                    </div>
+                                                    {{-- <div class="action">
+                                                        <button type="button" class="btn btn-outline-danger">
+                                                            <i class="fa fa-trash-o delete-location"
+                                                                style="padding-right: -10px;font-size: 17px;"></i>
+                                                        </button>
+                                                    </div> --}}
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -135,48 +136,53 @@
             </div>
         </div>
     </section>
+    {{-- Modal Content --}}
+    <div class="modal fade" id="basicModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title h2">Reply Complaint</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                    </button>
+                </div>
+                <form id="replyForm"action="{{ route('complaint-reply') }}" method="post">
+                    @csrf
+                    <div class="modal-body">
+                        <input type="hidden" id="complaintId" name="complaintId">
+                        <div class="mb-3">
+                            <label for="blogTitle" class="form-label text-dark fw-bold h5">Compose Response</label>
+                            <input type="text" class="form-control border-dark" name='reply'id="replyMessage"
+                                placeholder="Enter Compose Response" value="">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="sendReply">Send</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('script-area')
-    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0-alpha1/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $("#alluser").click(function() {
-                $("input[type=checkbox]").prop('checked', $(this).prop('checked'));
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const replyButtons = document.querySelectorAll('.reply-btn');
+            replyButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const complaintId = this.getAttribute('data-complaint-id');
+                    document.getElementById('complaintId').value = complaintId;
+                });
             });
         });
     </script>
     <script>
-        $(document).ready(function() {
-            $('.delete-location').click(function(event) {
-                event.preventDefault();
-                var CustomerId = $(this).closest('tr').attr('data-customer-id');
-                if (confirm('Are you sure you want to delete this Number?')) {
-                    $.ajax({
-                        url: '/delete-complaint/' + CustomerId,
-                        type: 'DELETE',
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function(response) {
-                            alert('Deleted successfully');
-                            location.reload();
-                        },
-                        error: function(xhr, status, error) {
-                            alert('Error deleting Number:', error);
-                        }
-                    });
-                }
-            });
-        });
+        window.onload = function() {
+            var flashMessage = document.getElementById('flash-message');
+            if (flashMessage) {
+                alert(flashMessage.innerText);
+            }
+        };
     </script>
     <script>
         $(document).ready(function() {
@@ -185,19 +191,6 @@
                 buttons: [
                     'copy', 'csv', 'excel', 'pdf', 'print'
                 ]
-            });
-        });
-        $(function() {
-            $('#datepickerFrom').datepicker({
-                format: 'dd-mm-yyyy',
-                autoclose: true,
-                todayHighlight: true,
-            });
-
-            $('#datepickerTo').datepicker({
-                format: 'dd-mm-yyyy',
-                autoclose: true,
-                todayHighlight: true,
             });
         });
     </script>

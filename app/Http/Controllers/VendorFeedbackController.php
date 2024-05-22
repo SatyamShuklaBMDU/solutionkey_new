@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Complaint;
+use App\Models\vendor_feedback;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Contracts\Service\Attribute\Required;
 
-class ComplaintController extends Controller
+
+
+class VendorFeedbackController extends Controller
 {
-   public function index()
-    {    
-        $complaint = Complaint::all();
-        return view('admin.complaint',compact('complaint'));
+    public function index()
+    {
+        // $feedback = Feedback::all();
+        $feedback = vendor_feedback::all();
+        return view('admin.vendor_feedback', compact('feedback'));
     }
 
     public function filter(Request $request)
@@ -22,28 +26,23 @@ class ComplaintController extends Controller
         ]);
         $start = $request->start;
         $end = $request->end;
-        $complaint= Complaint::whereDate('created_at', '>=', $start)
-        ->whereDate('created_at', '<=', $end)
+        $feedback = vendor_feedback::whereDate('created_at', '>=', $start)
+            ->whereDate('created_at', '<=', $end)
             ->orderBy('created_at', 'desc')
             ->get();
-        return view('admin.complaint', compact('complaint', 'start', 'end'));
+        return view('admin.vendor_feedback', compact('feedback', 'start', 'end'));
     }
-    
     public function destroy($id)
     {
-        try {
-            $complaint =Complaint::findOrFail($id);
-            $complaint->delete();
-            return response()->json(['success' => true]);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
-        }
+        $feedback = vendor_feedback::findOrFail($id);
+        $feedback->delete();
+        return response()->json(['success' => 'Deleted Successfully']);
     }
     public function reply(Request $request)
     {
-        $feedback_reply = complaint::find($request->complaintId);
+        $feedback_reply = vendor_feedback::find($request->feedbackId);
         $validator = Validator::make($request->all(), [
-            'complaintId' => 'required|exists:complaints,id',
+            'feedbackId' => 'required|exists:vendor_feedbacks,id',
             'reply' => 'required|string'
         ]);
         if ($validator->fails()) {
@@ -53,7 +52,6 @@ class ComplaintController extends Controller
         // $feedback->reply_person_id = auth()->user()->id;
         $feedback_reply->reply_date = now();
         $feedback_reply->save();
-        return redirect('/complaint')->with('successs', 'Reply Successfully!');
+        return redirect('/vendor-feedback')->with('successs', 'Reply Successfully!');
     }
-    
 }

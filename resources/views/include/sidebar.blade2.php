@@ -1,16 +1,14 @@
-@if (!function_exists('isActiveMenu'))
-    @php
-        // Function to determine if a menu should be expanded
-        function isActiveMenu($routes) {
-            foreach ($routes as $route) {
-                if (Route::currentRouteName() == $route) {
-                    return true;
-                }
+@php
+    // Function to determine if a menu should be expanded
+    function isActiveMenu($routes) {
+        foreach ($routes as $route) {
+            if (Route::currentRouteName() == $route) {
+                return true;
             }
-            return false;
         }
-    @endphp
-@endif
+        return false;
+    }
+@endphp
 
 <div class="sidebar">
     <div class="d-flex justify-content-between" style="width: 200px; margin: 10px;">
@@ -103,19 +101,8 @@
             </li>
         @endif
         @if (auth()->check() && auth()->user()->hasPermission('feedback'))
-        @php
-            $feedbackRoutes = ['feedback', 'vendor-feedback'];
-        @endphp
-            {{-- <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('feedback') ? 'active' : '' }}" href="{{ route('feedback') }}">Feedbacks</a>
-                
-            </li> --}}
             <li class="nav-item">
-                <a class="nav-link {{ isActiveMenu($feedbackRoutes) ? '' : 'collapsed' }}" href="#" data-bs-toggle="collapse" data-bs-target="#feedbackmenu" aria-expanded="{{ isActiveMenu($feedbackRoutes) ? 'true' : 'false' }}" aria-controls="feedbackmenu">Feedbacks<span class="dropdown-toggle ps-4"></span></a>
-                <ul class="nav collapse {{ isActiveMenu($feedbackRoutes) ? 'show' : '' }}" id="feedbackmenu">
-                    <li class="nav-item"><a class="nav-link ps-5 {{ request()->routeIs('feedback') ? 'active' : '' }}" href="{{ route('feedback') }}" style="padding-left:0px">Users Feedback</a></li>
-                    <li class="nav-item"><a class="nav-link ps-5 {{ request()->routeIs('vendor-feedback') ? 'active' : '' }}" href="{{ route('vendor-feedback') }}" style="padding-left:0px">Vendors Feedback</a></li>
-                </ul>
+                <a class="nav-link {{ request()->routeIs('feedback') ? 'active' : '' }}" href="{{ route('feedback') }}">Feedbacks</a>
             </li>
         @endif
         @if (auth()->check() && auth()->user()->hasPermission('review'))
@@ -129,20 +116,9 @@
             </li>
         @endif
         @if (auth()->check() && auth()->user()->hasPermission('complaint'))
-            {{-- <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('complaint') ? 'active' : '' }}" href="{{ route('complaint') }}">Complaints</a>
-            </li> --}}
-            @php
-            $complaintRoutes = ['complaint', 'vendor-complaint'];
-            @endphp
             <li class="nav-item">
-                <a class="nav-link {{ isActiveMenu($complaintRoutes) ? '' : 'collapsed' }}" href="#" data-bs-toggle="collapse" data-bs-target="#complaintmenu" aria-expanded="{{ isActiveMenu($complaintRoutes) ? 'true' : 'false' }}" aria-controls="complaintmenu">Complaints<span class="dropdown-toggle ps-4"></span></a>
-                <ul class="nav collapse {{ isActiveMenu($complaintRoutes) ? 'show' : '' }}" id="complaintmenu">
-                    <li class="nav-item"><a class="nav-link ps-5 {{ request()->routeIs('complaint') ? 'active' : '' }}" href="{{ route('complaint') }}" style="padding-left:0px">Users Complaint</a></li>
-                    <li class="nav-item"><a class="nav-link ps-5 {{ request()->routeIs('vendor-complaint') ? 'active' : '' }}" href="{{ route('vendor-complaint') }}" style="padding-left:0px">Vendors Complaint</a></li>
-                </ul>
+                <a class="nav-link {{ request()->routeIs('complaint') ? 'active' : '' }}" href="{{ route('complaint') }}">Complaints</a>
             </li>
-
         @endif
         @if (auth()->check() && auth()->user()->hasPermission('reward'))
             <li class="nav-item">
