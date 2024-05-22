@@ -35,6 +35,7 @@
         .main_content .main_content_iner {
             margin: 0px !important;
         }
+
         .dt-button {
             background-color: #033496 !important;
             color: white !important;
@@ -42,11 +43,6 @@
     </style>
 @endsection
 @section('content-area')
-    @if (session('successs'))
-        <div id="flash-message" style="display: none;">
-            {{ session('successs') }}
-        </div>
-    @endif
     <section class="main_content dashboard_part">
         <nav aria-label="breadcrumb" class="mb-2">
             <ol class="breadcrumb">
@@ -57,11 +53,6 @@
                     style="text-decoration: none;color:#033496;font-weight:600;font-size:18px;">Users Complaint</li>
             </ol>
         </nav>
-        @if (session()->has('success'))
-            <div class="alert alert-success">
-                {{ session()->get('success') }}
-            </div>
-        @endif
         <div class="main_content_iner">
             <div class="container-fluid plr_30 body_white_bg pt_30">
                 <div class="row justify-content-center">
@@ -108,7 +99,13 @@
                                                 {{-- <td>{{ $user->message }}</td> --}}
                                                 <td>{{ $user->subject }}</td>
                                                 <td>{{ $user->message }}</td>
-                                                <td>{{ $user->reply_date }}</td>
+                                                <td>
+                                                    @if ($user->reply_date)
+                                                    {{ $user->reply_date->timezone('Asia/Kolkata')->format('d F Y h:i A') }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
                                                 <td>{{ $user->reply }}</td>
                                                 <td class="d-flex">
                                                     <div class="d-flex">
@@ -192,6 +189,9 @@
                     'copy', 'csv', 'excel', 'pdf', 'print'
                 ]
             });
+            @if (session()->has('success'))
+                toastr.success('{{ session('success') }}');
+            @endif
         });
     </script>
 @endsection

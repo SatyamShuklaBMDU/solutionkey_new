@@ -45,27 +45,19 @@
             background-color: #033496 !important;
             color: white !important;
         }
-
     </style>
 @endsection
 @section('content-area')
-    @if(session('successs'))
-    <div id="flash-message" style="display: none;">
-        {{ session('successs') }}
-    </div>
-    @endif
     <section class="main_content dashboard_part">
         <nav aria-label="breadcrumb" class="mb-2">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#" style="text-decoration: none;color:#0d9603 !important;font-weight:600;font-size:20px;">Feedback Management</a></li>
-                <li class="breadcrumb-item active" aria-current="page" style="text-decoration: none;color:#033496;font-weight:600;font-size:18px;">Users Feedback</li>
+                <li class="breadcrumb-item"><a href="#"
+                        style="text-decoration: none;color:#0d9603 !important;font-weight:600;font-size:20px;">Feedback
+                        Management</a></li>
+                <li class="breadcrumb-item active" aria-current="page"
+                    style="text-decoration: none;color:#033496;font-weight:600;font-size:18px;">Users Feedback</li>
             </ol>
         </nav>
-        @if (session()->has('success'))
-            <div class="alert alert-success">
-                {{ session()->get('success') }}
-            </div>
-        @endif
         <div class="main_content_iner">
             <div class="container-fluid plr_30 body_white_bg pt_30">
                 <div class="row justify-content-center">
@@ -74,11 +66,11 @@
                             <form action="{{ route('feedback-filter') }}" method="post">
                                 @csrf
                                 <div class="row">
-                                @include('admin.date')
-                                <div class="col-sm-1 text-end" style="margin-top: 40px;">
-                                    <a class="btn text-white shadow-lg" href="{{ route('feedback') }}"
-                                        style="background-color:#033496;">Reset</a>
-                                </div>
+                                    @include('admin.date')
+                                    <div class="col-sm-1 text-end" style="margin-top: 40px;">
+                                        <a class="btn text-white shadow-lg" href="{{ route('feedback') }}"
+                                            style="background-color:#033496;">Reset</a>
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -99,34 +91,40 @@
                                             {{-- <th>Reply Btn</th> --}}
                                             <th>Action</th>
                                             {{-- <th>User Name</th> --}}
-                                       </tr>
+                                        </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($feedback as $user)
                                             <tr class="odd" data-user-id="{{ $user->id }}">
-                                                <td  class="sorting_1">{{ $loop->iteration }}</td>
+                                                <td class="sorting_1">{{ $loop->iteration }}</td>
                                                 <td>{{ \Carbon\Carbon::parse($user->created_at)->format('d M,Y') }}</td>
-                                                <td>{{ $user->customer->customers_id??'' }}</td>
-                                                <td>{{ $user->customer->name??'' }}</td>
+                                                <td>{{ $user->customer->customers_id ?? '' }}</td>
+                                                <td>{{ $user->customer->name ?? '' }}</td>
                                                 <td>{{ $user->subject }}</td>
                                                 <td>{{ $user->message }}</td>
-                                                <td>{{ $user->reply_date }}</td>
+                                                <td>
+                                                    @if ($user->reply_date)
+                                                    {{ $user->reply_date->timezone('Asia/Kolkata')->format('d F Y h:i A') }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
                                                 <td>{{ $user->reply }}</td>
                                                 <td class="d-flex">
-                                                <div class="d-flex">
-                                                    <a href="#"
-                                                        class="btn btn-success shadow sharp me-1 reply-btn"
-                                                        data-feedback-id="{{ $user->id }}"
-                                                        data-bs-toggle="modal" data-bs-target="#basicModal">Reply
-                                                    </a>
-                                                </div>
-                                                {{-- <div class="action">
+                                                    <div class="d-flex">
+                                                        <a href="#"
+                                                            class="btn btn-success shadow sharp me-1 reply-btn"
+                                                            data-feedback-id="{{ $user->id }}" data-bs-toggle="modal"
+                                                            data-bs-target="#basicModal">Reply
+                                                        </a>
+                                                    </div>
+                                                    {{-- <div class="action">
                                                     <button type="button" class="btn btn-outline-danger">
                                                         <i class="fa fa-trash-o delete-location"
                                                             style="padding-right: -10px;font-size: 17px;"></i>
                                                     </button>
                                                 </div> --}}
-                                            </td>
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -149,7 +147,7 @@
                 </div>
                 <form id="replyForm"action="{{ route('feedback-reply') }}" method="post">
                     @csrf
-                    <div  class="modal-body">
+                    <div class="modal-body">
                         <input type="hidden" id="feedbackId" name="feedbackId">
                         <div class="mb-3">
                             <label for="blogTitle" class="form-label text-dark fw-bold h5">Compose Response</label>
@@ -167,7 +165,7 @@
     </div>
 @endsection
 @section('script-area')
-     <script>
+    <script>
         document.addEventListener("DOMContentLoaded", function() {
             const replyButtons = document.querySelectorAll('.reply-btn');
             replyButtons.forEach(button => {
@@ -179,14 +177,6 @@
                 });
             });
         });
-    </script>
-    <script>
-        window.onload = function() {
-            var flashMessage = document.getElementById('flash-message');
-            if (flashMessage) {
-                alert(flashMessage.innerText);
-            }
-        };
     </script>
     <script>
         $(document).ready(function() {
@@ -222,18 +212,8 @@
                 ]
             });
         });
-        $(function() {
-            $('#datepickerFrom').datepicker({
-                format: 'dd-mm-yyyy',
-                autoclose: true,
-                todayHighlight: true,
-            });
-
-            $('#datepickerTo').datepicker({
-                format: 'dd-mm-yyyy',
-                autoclose: true,
-                todayHighlight: true,
-            });
-        });
+        @if (session()->has('success'))
+            toastr.success('{{ session('success') }}');
+        @endif
     </script>
 @endsection

@@ -14,4 +14,8 @@ class Complaint extends Model
     {
         return $this->belongsTo(Customer::class,'customer_id','id');
     }
+
+    protected $casts = [
+        'reply_date' => 'datetime',
+    ];
 }

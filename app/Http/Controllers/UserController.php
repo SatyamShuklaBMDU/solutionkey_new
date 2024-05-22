@@ -38,7 +38,7 @@ class UserController extends Controller
         $user->password = Hash::make($request->password);
         $user->permission = json_encode($request->permission);
         $user->save();
-        return redirect()->route('add-users')->with('success', 'Data Added Successfully');
+        return redirect()->route('all-users')->with('success', 'Data Added Successfully');
     }
     public function filter(Request $request)
     {

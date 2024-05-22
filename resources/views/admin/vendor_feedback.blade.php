@@ -58,11 +58,6 @@
     </style>
 @endsection
 @section('content-area')
-    @if (session('successs'))
-        <div id="flash-message" style="display: none;">
-            {{ session('successs') }}
-        </div>
-    @endif
     <section class="main_content dashboard_part">
         <nav aria-label="breadcrumb" class="mb-2">
             <ol class="breadcrumb">
@@ -73,11 +68,6 @@
                     style="text-decoration: none;color:#033496;font-weight:600;font-size:18px;">Vendors Feedback</li>
             </ol>
         </nav>
-        @if (session()->has('success'))
-            <div class="alert alert-success">
-                {{ session()->get('success') }}
-            </div>
-        @endif
         <div class="main_content_iner">
             <div class="container-fluid plr_30 body_white_bg pt_30">
                 <div class="row justify-content-center">
@@ -123,7 +113,13 @@
                                                 <td>{{ $user->vendors->name ?? '' }}</td>
                                                 <td>{{ $user->subject }}</td>
                                                 <td>{{ $user->message }}</td>
-                                                <td>{{ $user->reply_date }}</td>
+                                                <td>
+                                                    @if ($user->reply_date)
+                                                    {{ $user->reply_date->timezone('Asia/Kolkata')->format('d F Y h:i A') }}
+                                                    @else
+                                                        N/A
+                                                    @endif
+                                                </td>
                                                 <td>{{ $user->reply }}</td>
 
                                                 <td class="d-flex">
@@ -193,14 +189,6 @@
         });
     </script>
     <script>
-        window.onload = function() {
-            var flashMessage = document.getElementById('flash-message');
-            if (flashMessage) {
-                alert(flashMessage.innerText);
-            }
-        };
-    </script>
-    <script>
         $(document).ready(function() {
             $('#customerTable').DataTable({
                 dom: 'Bfrtip',
@@ -208,6 +196,9 @@
                     'copy', 'csv', 'excel', 'pdf', 'print'
                 ]
             });
+            @if (session()->has('success'))
+                toastr.success('{{ session('success') }}');
+            @endif
         });
     </script>
 @endsection

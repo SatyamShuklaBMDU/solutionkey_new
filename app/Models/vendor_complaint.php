@@ -14,4 +14,8 @@ class vendor_complaint extends Model
     {
         return $this->belongsTo(Vendor::class,'vendor_id');
     }
+
+    protected $casts = [
+        'reply_date' => 'datetime',
+    ];
 }

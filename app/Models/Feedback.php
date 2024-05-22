@@ -8,9 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Feedback extends Model
 {
     use HasFactory;
-    protected $guarded=[];
+    protected $guarded = [];
     public function customer()
     {
-        return $this->belongsTo(Customer::class,'customer_id','id');
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
     }
+    protected $casts = [
+        'reply_date' => 'datetime',
+    ];
 }

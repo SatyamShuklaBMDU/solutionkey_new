@@ -12,6 +12,7 @@ class FeedbackController extends Controller
     {
         // $feedback = Feedback::all();
         $feedback = Feedback::all();
+        // dd($feedback);
         return view('admin.feedback',compact('feedback'));
     }
 
@@ -47,6 +48,6 @@ class FeedbackController extends Controller
         $feedback_reply->reply = $request->reply;
         $feedback_reply->reply_date = now();
         $feedback_reply->save();
-        return redirect('/feedback')->with('successs', 'Reply Successfully!');
+        return redirect('/feedback')->with('success', 'Reply Successfully!');
     }
 }

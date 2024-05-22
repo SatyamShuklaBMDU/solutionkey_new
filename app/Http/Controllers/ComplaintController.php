@@ -53,7 +53,7 @@ class ComplaintController extends Controller
         // $feedback->reply_person_id = auth()->user()->id;
         $feedback_reply->reply_date = now();
         $feedback_reply->save();
-        return redirect('/complaint')->with('successs', 'Reply Successfully!');
+        return redirect('/complaint')->with('success', 'Reply Successfully!');
     }
     
 }

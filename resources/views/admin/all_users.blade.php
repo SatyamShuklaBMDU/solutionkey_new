@@ -45,60 +45,19 @@
             background-color: #033496 !important;
             color: white !important;
         }
-
-        .dataTables_wrapper .dataTables_paginate .paginate_button {
-            font-size: 14px;
-            padding: 5px 10px;
-            white-space: nowrap;
-        }
-
-        #customerTable_previous {
-            transform: translateX(-20px);
-        }
-        
-        /* For DataTable */
-        #customerTable_wrapper, #customerTable th, #customerTable td {
-            font-size: 15px;
-        }
-
-        /* For datepicker */
-        .ui-datepicker {
-            font-size: 15px;
-        }
-        /* For input placeholder */
-        ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-            font-size: 15px;
-        }
-        ::-moz-placeholder { /* Firefox 19+ */
-            font-size: 15px;
-        }
-        :-ms-input-placeholder { /* IE 10+ */
-            font-size: 15px;
-        }
-        :-moz-placeholder { /* Firefox 18- */
-            font-size: 15px;
-        }
-  
-
     </style>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
 @endsection
 @section('content-area')
     <section class="main_content dashboard_part">
         <nav aria-label="breadcrumb" class="mb-5">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#" style="text-decoration: none;color:#0d9603 !important;font-weight:600;font-size:20px;">User Management</a></li>
-                <li class="breadcrumb-item" aria-current="page" style="text-decoration: none;color:#033496;font-weight:600;font-size:18px;">All User</li>
+                <li class="breadcrumb-item"><a href="#"
+                        style="text-decoration: none;color:#0d9603 !important;font-weight:600;font-size:20px;">User
+                        Management</a></li>
+                <li class="breadcrumb-item" aria-current="page"
+                    style="text-decoration: none;color:#033496;font-weight:600;font-size:18px;">All User</li>
             </ol>
         </nav>
-        @if (session()->has('success'))
-            <div class="alert alert-success">
-                {{ session()->get('success') }}
-            </div>
-        @endif
         <div class="main_content_iner">
             <div class="container-fluid plr_30 body_white_bg pt_30">
                 <div class="row justify-content-center">
@@ -107,11 +66,11 @@
                             <form action="{{ route('user-filter') }}" method="post">
                                 @csrf
                                 <div class="row">
-                                @include('admin.date')
-                                <div class="col-sm-1 text-end" style="margin-top: 40px;font-size:15px;">
-                                    <a class="btn text-white shadow-lg" href="{{ route('all-users') }}"
-                                        style="background-color:#033496;font-size:15px;">Reset</a>
-                                </div>
+                                    @include('admin.date')
+                                    <div class="col-sm-1 text-end" style="margin-top: 40px;font-size:15px;">
+                                        <a class="btn text-white shadow-lg" href="{{ route('all-users') }}"
+                                            style="background-color:#033496;font-size:15px;">Reset</a>
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -121,17 +80,12 @@
                                 <table id="customerTable" class="display nowrap" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th>
-                                                S no.</th>
-                                            <th>
-                                                Registration Date
-                                            </th>
-                                            <th>
-                                                Name
-                                            </th>
-                                            <th> Email</th>
-                                            <th> User Role </th>
-                                            <th> User Permission </th>
+                                            <th>S no.</th>
+                                            <th>Registration Date</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>User Role</th>
+                                            {{-- <th> User Permission </th> --}}
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -151,12 +105,8 @@
                                                         $allpermission = implode(',', $userpermission);
                                                     }
                                                 @endphp
-                                                <td>{{ $allpermission }}</td>
+                                                {{-- <td>{{ $allpermission }}</td> --}}
                                                 <td class="action">
-                                                    {{-- <button type="button" class="btn btn-outline-danger">
-                                                        <i class="fa fa-trash-o delete-location"
-                                                            style="padding-right: -10px;font-size: 17px;"></i>
-                                                    </button> --}}
                                                     <button type="button" class="btn btn-outline-danger">
                                                         <i class="fa fa-trash-o delete-location"
                                                             data-user-id="{{ $user->id }}"
@@ -167,238 +117,207 @@
                                                         <i class="fa fa-pencil"
                                                             style="padding-right: -10px;font-size: 17px;"></i>
                                                     </button>
-                                                    <div class="modal" id="myModal">
+                                                    <div class="modal fade" id="myModal" tabindex="-1"
+                                                        aria-labelledby="myModalLabel" aria-hidden="true">
                                                         <div class="modal-dialog">
                                                             <div class="modal-content">
                                                                 <div class="container-fluid">
                                                                     <div class="row">
-                                                                        <div class="main-header">
+                                                                        <div
+                                                                            class="col-12 d-flex justify-content-between align-items-center">
                                                                             <h4 class="mt-4">Edit User Profile</h4>
+                                                                            <button type="button" class="btn-close"
+                                                                                data-bs-dismiss="modal"
+                                                                                aria-label="Close"></button>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="row dashboard-header"
-                                                                        style="background: #e5e5e5;">
+                                                                    <div class="row dashboard-header bg-light">
                                                                         <div class="col-md-12 mx-auto">
-                                                                            <form class="notification-form shadow rounded"
+                                                                            <form
+                                                                                class="notification-form shadow rounded p-3"
                                                                                 action="{{ route('updateuserlist') }}"
                                                                                 method="post" id="userFormData">
                                                                                 @csrf
-                                                                                <div class="form-group">
-                                                                                    <label for="exampleInputEmail1">User
-                                                                                        Name</label>
+                                                                                <div class="form-group mb-3">
+                                                                                    <label for="userName">User Name</label>
                                                                                     <input type="text" name="name"
                                                                                         value="{{ old('name') }}"
                                                                                         class="form-control" id="userName"
-                                                                                        aria-describedby="textHelp"
                                                                                         placeholder="please enter your name">
                                                                                     @if ($errors->has('name'))
                                                                                         <span
-                                                                                            class="help-block">{{ $errors->first('name') }}</span>
+                                                                                            class="text-danger">{{ $errors->first('name') }}</span>
                                                                                     @endif
                                                                                 </div>
                                                                                 <input type="hidden" id="userId"
                                                                                     value="" name="userId">
-                                                                                <div class="form-group">
+                                                                                <div class="form-group mb-3">
                                                                                     <label for="userRole">Role</label>
                                                                                     <input type="text" name="role"
                                                                                         class="form-control" id="userRole"
-                                                                                        aria-describedby="textHelp"
                                                                                         placeholder="Role">
                                                                                     @if ($errors->has('role'))
                                                                                         <span
-                                                                                            class="help-block">{{ $errors->first('role') }}</span>
+                                                                                            class="text-danger">{{ $errors->first('role') }}</span>
                                                                                     @endif
                                                                                 </div>
                                                                                 <h3>Assign Modules</h3>
                                                                                 <div class="row">
                                                                                     <div
-                                                                                        class="col-md-12 Modules d-flex justify-content-around">
-                                                                                        <div class="form-check"
-                                                                                            style="">
+                                                                                        class="col-md-12 Modules d-flex flex-wrap justify-content-start">
+                                                                                        <div class="form-check me-3 mb-2">
                                                                                             <input class="form-check-input"
                                                                                                 type="checkbox"
                                                                                                 value="all"
                                                                                                 id="all"
-                                                                                                name="permission[]"
-                                                                                                checked>
+                                                                                                name="permission[]" checked>
                                                                                             <label class="form-check-label"
-                                                                                                for="all">
-                                                                                                All User
-                                                                                            </label>
+                                                                                                for="all">All
+                                                                                                User</label>
                                                                                         </div>
-                                                                                        <div class="form-check"
-                                                                                            style="">
+                                                                                        <div class="form-check me-3 mb-2">
                                                                                             <input class="form-check-input"
                                                                                                 type="checkbox"
                                                                                                 value="usermanagement"
                                                                                                 id="usermanagement"
                                                                                                 name="permission[]">
                                                                                             <label class="form-check-label"
-                                                                                                for="usermanagement">
-                                                                                                User Management
-                                                                                            </label>
+                                                                                                for="usermanagement">User
+                                                                                                Management</label>
                                                                                         </div>
-                                                                                        <div class="form-check"
-                                                                                            style="">
+                                                                                        <div class="form-check me-3 mb-2">
                                                                                             <input class="form-check-input"
                                                                                                 type="checkbox"
                                                                                                 value="servicemanagement"
                                                                                                 id="servicemanagement"
                                                                                                 name="permission[]">
                                                                                             <label class="form-check-label"
-                                                                                                for="servicemanagement">
-                                                                                                Service Management
-                                                                                            </label>
+                                                                                                for="servicemanagement">Service
+                                                                                                Management</label>
                                                                                         </div>
-                                                                                        <div class="form-check">
+                                                                                        <div class="form-check me-3 mb-2">
                                                                                             <input class="form-check-input"
                                                                                                 type="checkbox"
                                                                                                 value="professionalmanagement"
                                                                                                 id="professionalmanagement"
                                                                                                 name="permission[]">
                                                                                             <label class="form-check-label"
-                                                                                                for="professionalmanagement">
-                                                                                                Professional Management
-                                                                                            </label>
+                                                                                                for="professionalmanagement">Professional
+                                                                                                Management</label>
                                                                                         </div>
-                                                                                        <div class="form-check">
+                                                                                        <div class="form-check me-3 mb-2">
                                                                                             <input class="form-check-input"
                                                                                                 type="checkbox"
                                                                                                 value="blogmanagement"
                                                                                                 id="blogmanagement"
                                                                                                 name="permission[]">
                                                                                             <label class="form-check-label"
-                                                                                                for="blogmanagement">
-                                                                                                Blog Management
-                                                                                            </label>
+                                                                                                for="blogmanagement">Blog
+                                                                                                Management</label>
                                                                                         </div>
-                                                                                        <div class="form-check">
+                                                                                        <div class="form-check me-3 mb-2">
                                                                                             <input class="form-check-input"
                                                                                                 type="checkbox"
                                                                                                 value="notifications"
                                                                                                 id="notifications"
                                                                                                 name="permission[]">
                                                                                             <label class="form-check-label"
-                                                                                                for="notifications">
-                                                                                                Notification
-                                                                                            </label>
+                                                                                                for="notifications">Notification</label>
                                                                                         </div>
-                                                                                    </div>
-                                                                                    <div
-                                                                                        class="col-md-12 Modules d-flex justify-content-around ">
-                                                                                        <div class="form-check ">
-                                                                                            <input
-                                                                                                class="form-check-input "
+                                                                                        <div class="form-check me-3 mb-2">
+                                                                                            <input class="form-check-input"
                                                                                                 type="checkbox"
                                                                                                 value="customermanagement"
                                                                                                 id="customermanagement"
                                                                                                 name="permission[]">
                                                                                             <label class="form-check-label"
-                                                                                                for="customermanagement">
-                                                                                                Customer Management
-                                                                                            </label>
+                                                                                                for="customermanagement">Customer
+                                                                                                Management</label>
                                                                                         </div>
-                                                                                        <div class="form-check">
+                                                                                        <div class="form-check me-3 mb-2">
                                                                                             <input class="form-check-input"
                                                                                                 type="checkbox"
                                                                                                 value="booking"
                                                                                                 id="booking"
                                                                                                 name="permission[]">
                                                                                             <label class="form-check-label"
-                                                                                                for="booking">
-                                                                                                Booking & Scheduling
-                                                                                            </label>
+                                                                                                for="booking">Booking &
+                                                                                                Scheduling</label>
                                                                                         </div>
-                                                                                        <!-- <div class="col-md-4"> -->
-                                                                                        <div class="form-check">
+                                                                                        <div class="form-check me-3 mb-2">
                                                                                             <input class="form-check-input"
                                                                                                 type="checkbox"
                                                                                                 value="payment"
                                                                                                 id="payment"
                                                                                                 name="permission[]">
                                                                                             <label class="form-check-label"
-                                                                                                for="payment">
-                                                                                                Payment & Invoicing
-                                                                                            </label>
+                                                                                                for="payment">Payment &
+                                                                                                Invoicing</label>
                                                                                         </div>
-                                                                                    </div>
-                                                                                    <div
-                                                                                        class="col-md-12 Modules d-flex justify-content-around">
-                                                                                        <div class="form-check">
+                                                                                        <div class="form-check me-3 mb-2">
                                                                                             <input class="form-check-input"
                                                                                                 type="checkbox"
                                                                                                 value="feedback"
                                                                                                 id="feedback"
                                                                                                 name="permission[]">
                                                                                             <label class="form-check-label"
-                                                                                                for="feedback">
-                                                                                                Feedback
-                                                                                            </label>
+                                                                                                for="feedback">Feedback</label>
                                                                                         </div>
-                                                                                        <div class="form-check">
+                                                                                        <div class="form-check me-3 mb-2">
                                                                                             <input class="form-check-input"
                                                                                                 type="checkbox"
                                                                                                 value="complaint"
                                                                                                 id="complaint"
                                                                                                 name="permission[]">
                                                                                             <label class="form-check-label"
-                                                                                                for="complaint">
-                                                                                                Complaint
-                                                                                            </label>
+                                                                                                for="complaint">Complaint</label>
                                                                                         </div>
-                                                                                        <div class="form-check">
+                                                                                        <div class="form-check me-3 mb-2">
                                                                                             <input class="form-check-input"
                                                                                                 type="checkbox"
                                                                                                 value="referral"
                                                                                                 id="referral"
                                                                                                 name="permission[]">
                                                                                             <label class="form-check-label"
-                                                                                                for="referral">
-                                                                                                Referral & Earning
-                                                                                            </label>
+                                                                                                for="referral">Referral &
+                                                                                                Earning</label>
                                                                                         </div>
-                                                                                        <div class="form-check">
+                                                                                        <div class="form-check me-3 mb-2">
                                                                                             <input class="form-check-input"
                                                                                                 type="checkbox"
                                                                                                 value="review"
                                                                                                 id="review"
                                                                                                 name="permission[]">
                                                                                             <label class="form-check-label"
-                                                                                                for="review">
-                                                                                                Review & Rating
-                                                                                            </label>
+                                                                                                for="review">Review &
+                                                                                                Rating</label>
                                                                                         </div>
-                                                                                        <div class="form-check">
+                                                                                        <div class="form-check me-3 mb-2">
                                                                                             <input class="form-check-input"
                                                                                                 type="checkbox"
                                                                                                 value="reward"
                                                                                                 id="reward"
                                                                                                 name="permission[]">
                                                                                             <label class="form-check-label"
-                                                                                                for="reward">
-                                                                                                Reward & Commissions
-                                                                                            </label>
+                                                                                                for="reward">Reward &
+                                                                                                Commissions</label>
                                                                                         </div>
-                                                                                        <!-- <div class="col-md-4"> -->
-                                                                                        <div class="form-check">
+                                                                                        <div class="form-check me-3 mb-2">
                                                                                             <input class="form-check-input"
                                                                                                 type="checkbox"
                                                                                                 value="analytic"
                                                                                                 id="analytic"
                                                                                                 name="permission[]">
                                                                                             <label class="form-check-label"
-                                                                                                for="analytic">
-                                                                                                Analytic & Reporting
-                                                                                            </label>
+                                                                                                for="analytic">Analytic &
+                                                                                                Reporting</label>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
                                                                                 <button type="submit"
-                                                                                    class="btn btn-dark btn-lg"
-                                                                                    style="margin: 30px 0px 0px;"
+                                                                                    class="btn btn-dark btn-lg mt-3"
                                                                                     id="userUpdateButton">Update User
-                                                                                    Profile
-                                                                                </button>
+                                                                                    Profile</button>
                                                                             </form>
                                                                         </div>
                                                                     </div>
@@ -420,16 +339,6 @@
     </section>
 @endsection
 @section('script-area')
-    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0-alpha1/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             $("#alluser").click(function() {
@@ -439,50 +348,58 @@
     </script>
     <script>
         $(document).ready(function() {
-            $('.delete-location').click(function(event) {
-                event.preventDefault();
-                var userId = $(this).data('user-id');
-                if (confirm('Are you sure you want to delete this Number?')) {
-                    $.ajax({
-                        url: '/delete-user/' + userId,
-                        type: 'delete',
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function(response) {
-                            alert('Deleted successfully');
-                            location.reload();
-                        },
-                        error: function(xhr, status, error) {
-                            alert('Error deleting Number: ' + error);
-                        }
-                    });
-                }
-            });
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-            $('#customerTable').DataTable({
+            var table = $('#customerTable').DataTable({
                 dom: 'Bfrtip',
                 buttons: [
                     'copy', 'csv', 'excel', 'pdf', 'print'
                 ]
             });
-        });
-        $(function() {
-            $('#datepickerFrom').datepicker({
-                format: 'dd-mm-yyyy',
-                autoclose: true,
-                todayHighlight: true,
-            });
+            $('.delete-location').click(function(event) {
+                event.preventDefault();
+                var userId = $(this).data('user-id');
+                var row = $(this).closest('tr'); // Get the closest table row
 
-            $('#datepickerTo').datepicker({
-                format: 'dd-mm-yyyy',
-                autoclose: true,
-                todayHighlight: true,
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "{{ url('delete-user') }}/" +
+                                userId, // Using Laravel url() method
+                            type: 'delete',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function(response) {
+                                Swal.fire(
+                                    'Deleted!',
+                                    'The user has been deleted.',
+                                    'success'
+                                );
+                                table.row(row).remove()
+                                    .draw(); // Remove the row from the DataTable
+                            },
+                            error: function(xhr, status, error) {
+                                Swal.fire(
+                                    'Error!',
+                                    'Failed to delete the user: ' + error,
+                                    'error'
+                                );
+                            }
+                        });
+                    }
+                });
             });
         });
+    </script>
+    <script>
+        $(document).ready(function() {});
     </script>
     <script>
         function showModal(button) {
@@ -523,5 +440,10 @@
                 }
             });
         };
+    </script>
+    <script>
+        @if (session()->has('success'))
+            toastr.success('{{ session('success') }}');
+        @endif
     </script>
 @endsection
