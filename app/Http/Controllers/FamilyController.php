@@ -7,25 +7,29 @@ use Illuminate\Http\Request;
 
 class FamilyController extends Controller
 {
-    public function index()
+    public function index($id)
     {
-        $customer_families = CustomerFamily::all();
-        return view('admin.all_family', compact('customer_families'));
+        $Did = decrypt($id);
+        $customer_families = CustomerFamily::where('customer_id',$Did)->get();
+        return view('admin.all_family', compact('customer_families','Did'));
     }
 
-    public function filter(Request $request)
+    public function filter(Request $request, $id)
     {
         $request->validate([
             'start' => 'required|date',
             'end' => 'required|date|after_or_equal:start',
         ]);
+
+        $Did = decrypt($id);
         $start = $request->start;
         $end = $request->end;
-        $customer_families = CustomerFamily::whereDate('created_at', '>=', $start)
+        $customer_families = CustomerFamily::where('customer_id',$Did)
+            ->whereDate('created_at', '>=', $start)
             ->whereDate('created_at', '<=', $end)
             ->orderBy('created_at', 'desc')
             ->get();
-        return view('admin.all_family', compact('customer_families', 'start', 'end'));
+        return view('admin.all_family', compact('customer_families', 'start', 'end','Did'));
     }
     public function getCustomerDetails($id)
     {

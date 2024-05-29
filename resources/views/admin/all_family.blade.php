@@ -5,7 +5,6 @@
         .main_content {
             padding-left: 283px;
             padding-bottom: 0% !important;
-            margin: 0px !important;
         }
 
         .breadcrumb {
@@ -94,12 +93,12 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-12 ">
                         <div class="row mb" style="margin-bottom: 50px; margin-left: 5px;">
-                            <form action="{{ route('family-filter') }}" method="post">
+                            <form action="{{ route('family-filter',encrypt($Did)) }}" method="post">
                                 @csrf
                                 <div class="row">
                                     @include('admin.date')
                                     <div class="col-sm-1" style="margin-top: 40px;">
-                                        <a class="btn text-white shadow-lg" href="{{ route('customer-family') }}"
+                                        <a class="btn text-white shadow-lg" href="{{ route('customer-family',encrypt($Did)) }}"
                                             style="background-color:#033496;font-size:15px;">Reset</a>
                                     </div>
                                 </div>

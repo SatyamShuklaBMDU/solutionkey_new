@@ -36,10 +36,10 @@
         <nav aria-label="breadcrumb" class="mb-5">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#"
-                        style="text-decoration: none;color:#0d9603 !important;font-weight:600;font-size:20px;">Services
+                        style="text-decoration: none;color:#0d9603 !important;font-weight:600;font-size:20px;">Category
                         Management</a></li>
                 <li class="breadcrumb-item active" aria-current="page"
-                    style="text-decoration: none;color:#033496;font-weight:600;font-size:18px;">Add Services</li>
+                    style="text-decoration: none;color:#033496;font-weight:600;font-size:18px;">Add Category</li>
             </ol>
         </nav>
         <div class="main_content_iner ">
@@ -68,7 +68,7 @@
                                 @method('PUT')
                             @endif
                             <div class="form-group">
-                                <label for="services_name">Service Name</label>
+                                <label for="services_name">Category Name</label>
                                 <input type="text" name="services_name"
                                     value="{{ old('services_name', isset($service) ? $service->services_name : '') }}"
                                     class="form-control" id="services_name" aria-describedby="textHelp"

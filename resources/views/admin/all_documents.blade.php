@@ -5,7 +5,6 @@
         .main_content {
             padding-left: 283px;
             padding-bottom: 0% !important;
-            margin: 0px !important;
         }
 
         .breadcrumb {
@@ -116,7 +115,7 @@
                                 <div class="row">
                                     @include('admin.date')
                                     <div class="col-sm-1" style="margin-left: 10px; margin-top: 40px;">
-                                        <a class="btn text-white shadow-lg" href="{{ route('customer-document') }}"
+                                        <a class="btn text-white shadow-lg" href="{{ route('customer-document',encrypt($Did)) }}"
                                             style="background-color:#033496;font-size:15px;">Reset</a>
                                     </div>
                                 </div>
@@ -128,12 +127,12 @@
                                 <table id="customerTable" class="display nowrap" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th>S No.</th>
-                                            <th> Date</th>
-                                            <th>Customer Id</th>
-                                            <th>Name</th>
-                                            <th>Image</th>
-                                            <th>Document Description</th>
+                                            <th class="text-center">S No.</th>
+                                            <th class="text-center">Date</th>
+                                            <th class="text-center">Customer Id</th>
+                                            <th class="text-center">Document Name</th>
+                                            <th class="text-center">Document Image</th>
+                                            <th class="text-center">Document Details</th>
                                             {{-- <th>Action</th> --}}
                                         </tr>
                                     </thead>

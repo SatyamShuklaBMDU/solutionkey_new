@@ -5,7 +5,6 @@
         .main_content {
             padding-left: 283px;
             padding-bottom: 0% !important;
-            margin: 0px !important;
         }
 
         .breadcrumb {
@@ -26,6 +25,7 @@
         .main_content .main_content_iner {
             margin: 0px !important;
         }
+
         .statusSwitch {
             --s: 18px;
             /* adjust this to control the size*/
@@ -75,7 +75,7 @@
 
 @section('content-area')
     <section class="main_content dashboard_part">
-        <nav aria-label="breadcrumb" class="mb-5">
+        <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#"
                         style="text-decoration: none;color:#0d9603 !important;font-weight:600;font-size:20px;">Customer
@@ -110,12 +110,15 @@
                                             <tr>
                                                 <th style="text-align: center;">S no.</th>
                                                 <th style="text-align: center;">Registration Date</th>
+                                                {{-- <th style="text-align: center;">Profile Pic</th> --}}
                                                 <th style="text-align: center;">Customer ID</th>
                                                 <th style="text-align: center;">Name</th>
                                                 <th style="text-align: center;">Phone number</th>
                                                 <th style="text-align: center;">Email</th>
                                                 <th style="text-align: center;">Action</th>
                                                 <th style="text-align: center;">Remark</th>
+                                                <th style="text-align: center;">Documents</th>
+                                                <th style="text-align: center;">Members</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -124,6 +127,11 @@
                                                     <td style="text-align: center;">{{ $loop->iteration }}</td>
                                                     <td style="text-align: center;">
                                                         {{ date('d-m-Y', strtotime($customers->created_at)) }}</td>
+                                                    {{-- <td style="text-align: center;"><a
+                                                            href="{{ asset($customers->profile_pic) }}" target="_blank"><img
+                                                                src="{{ asset($customers->profile_pic) }}" alt=""
+                                                                height="25px" width="25px" class="rounded-circle"></a>
+                                                    </td> --}}
                                                     <td style="text-align: center;">{{ $customers->customers_id }}</td>
                                                     <td style="text-align: center;">{{ $customers->name }}</td>
                                                     <td style="text-align: center;">{{ $customers->phone_number }}</td>
@@ -140,6 +148,14 @@
                                                     </td>
                                                     <td style="text-align: center;">
                                                         {{ $customers->deactivation_remark ?? '--' }}</td>
+                                                    <td style="text-align: center;"><a
+                                                            href="{{ route('customer-document', encrypt($customers->id)) }}"
+                                                            class="btn btn-primary"><i class="fa fa-file"
+                                                                aria-hidden="true"></i></a></td>
+                                                    <td class="text-center">
+                                                        <a href="{{ route('customer-family', encrypt($customers->id)) }}"
+                                                            class="btn btn-primary"><i class="fa fa-users" aria-hidden="true"></i></a>
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -163,8 +179,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="text-center">
-                        <img id="customerProfilePic" src="" alt="Profile Picture"
-                            class="img-fluid rounded-circle mb-3" style="display: none; max-width: 150px;">
+                        <img id="customerProfilePic" src="" alt="Profile Picture" class="img-fluid rounded-circle mb-3" style="display: none; max-width: 150px;">
                     </div>
                     <p><strong>ID:</strong> <span id="customerId"></span></p>
                     <p><strong>Name:</strong> <span id="customerName"></span></p>
@@ -307,7 +322,6 @@
                         });
                         return;
                     }
-
                     document.getElementById('customerId').textContent = response.id;
                     document.getElementById('customerName').textContent = response.name;
                     document.getElementById('customerGender').textContent = response.gender;
@@ -328,7 +342,7 @@
                         profilePic.src = response.profile_pic;
                         profilePic.style.display = 'block';
                     } else {
-                        profilePic.style.display = 'none';
+                        profilePic.style.display = 'block';
                     }
 
                     const modal = new bootstrap.Modal(document.getElementById('customerDetailModal'));

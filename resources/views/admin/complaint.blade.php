@@ -5,7 +5,6 @@
         .main_content {
             padding-left: 283px;
             padding-bottom: 0% !important;
-            margin: 0px !important;
         }
 
         .breadcrumb {

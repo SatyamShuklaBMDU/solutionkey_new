@@ -59,9 +59,9 @@
                             method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
-                                <label for="services">Choose Services</label>
+                                <label for="services">Choose Category</label>
                                 <select name="services" class="form-control" id="services">
-                                    <option selected disabled>Select Services</option>
+                                    <option selected disabled>Select Category</option>
                                     @foreach ($services as $service)
                                         <option value="{{ $service->id }}">{{ $service->services_name }}</option>
                                     @endforeach
@@ -71,10 +71,10 @@
                                 @enderror
                             </div>
                             <div class="form-group">
-                                <label for="services_name">Service Name</label>
+                                <label for="services_name">Category Name</label>
                                 <input type="text" name="services_name" value="{{ old('services_name') }}"
                                     class="form-control" id="services_name" aria-describedby="textHelp"
-                                    placeholder="Please enter your service name" style="font-size: 15px;">
+                                    placeholder="Please enter your category name" style="font-size: 15px;">
                                 @error('services_name')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -97,10 +97,10 @@
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <button type="button" class="btn btn-info text-danger   text-bold shadow btn-lg "
+                        <button type="button" class="btn btn-info text-danger text-bold shadow"
                                 style="margin:30px 0px 0px;"><a href="{{ route('sub-service') }}"
                                     style="text-decoration: none;color:white;font-weight:500">Back</a></button>
-                            <button type="submit" class="btn btn-success btn-lg"
+                            <button type="submit" class="btn btn-success"
                                 style="margin:30px 0px 0px;font-weight:500;">Submit</button>
                         </form>
                     </div>

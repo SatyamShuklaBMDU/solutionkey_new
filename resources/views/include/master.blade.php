@@ -10,13 +10,6 @@
     <title>Solution Key</title>
     <style>
         /* Sidebar */
-        .sidebar {
-            width: 250px;
-            background-color: #f8f9fa;
-            /* Change as needed */
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            /* Add shadow */
-        }
 
         /* Main menu items */
         .nav-item>.nav-link {

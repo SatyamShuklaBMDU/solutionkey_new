@@ -1,4 +1,4 @@
-<div class="header_iner d-flex justify-content-between align-items-center position-relative"style="padding: 0;margin: 0;height:50px !important;">
+<div class="header_iner d-flex justify-content-between align-items-center position-fixed"style="padding: 0;margin: 0;height:50px !important;z-index: 1000;">
     <div class="sidebar_icon d-lg-none">
         <i class="ti-menu"></i>
     </div>

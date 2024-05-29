@@ -7,9 +7,10 @@ use Illuminate\Http\Request;
 
 class DocumentController extends Controller
 {
-    public function index(){
-        $customer_documents = CustomerDocument::all();
-        return view('admin.all_documents',compact('customer_documents'));
+    public function index($id){
+        $Did = decrypt($id);
+        $customer_documents = CustomerDocument::where('customer_id',$Did)->get();
+        return view('admin.all_documents',compact('customer_documents','Did'));
         // dd($customer_documents);
     }
 

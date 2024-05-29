@@ -5,7 +5,6 @@
         .main_content {
             padding-left: 283px;
             padding-bottom: 0% !important;
-            margin: 0px !important;
         }
 
         .breadcrumb {
@@ -96,13 +95,13 @@
 @endsection
 @section('content-area')
     <section class="main_content dashboard_part">
-        <nav aria-label="breadcrumb" class="mb-5">
+        <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#"
-                        style="text-decoration: none;color:#0d9603 !important;font-weight:600;font-size:20px;">Services
+                        style="text-decoration: none;color:#0d9603 !important;font-weight:600;font-size:20px;">Category
                         Management</a></li>
                 <li class="breadcrumb-item active" aria-current="page"
-                    style="text-decoration: none;color:#033496 !important;font-weight:600;font-size:18px;">All Services</li>
+                    style="text-decoration: none;color:#033496 !important;font-weight:600;font-size:18px;">All Category</li>
             </ol>
         </nav>
         @if (session()->has('success'))
@@ -125,7 +124,7 @@
                                     </div>
                                     <div class="col-sm-3 text-end" style="margin-top: 40px;">
                                         <a class="btn btn-sm text-white" href="{{ route('service-create') }}"
-                                            style="background-color:#0d9603;font-size:15px;">Create New Service</a>
+                                            style="background-color:#033496;font-size:15px;">Create New Category</a>
                                     </div>
                                 </div>
                             </form>
@@ -138,9 +137,9 @@
                                         <tr>
                                             <th class="text-center">S No.</th>
                                             <th class="text-center">Image</th>
-                                            <th class="text-center"> Date</th>
-                                            <th class="text-center">Services Name</th>
-                                            <th class="text-center">Description</th>
+                                            {{-- <th class="text-center"> Date</th> --}}
+                                            <th class="text-center">Name</th>
+                                            {{-- <th class="text-center">Description</th> --}}
                                             <th class="text-center">Status</th>
                                             <th class="text-center">Action</th>
                                         </tr>
@@ -159,10 +158,9 @@
                                                         <p>No image available</p>
                                                     </td>
                                                 @endif
-
-                                                <td class="text-center">{{ \Carbon\Carbon::parse($service->created_at)->format('d M,Y') }}</td>
+                                                {{-- <td class="text-center">{{ \Carbon\Carbon::parse($service->created_at)->format('d M,Y') }}</td> --}}
                                                 <td class="text-center">{{ $service->services_name }}</td>
-                                                <td class="text-center">{{ $service->description }}</td>
+                                                {{-- <td class="text-center">{{ $service->description }}</td> --}}
                                                 <td class="text-center">
                                                     @if ($service->status == 1)
                                                         <div class="job-status text-capitalize">Active</div>

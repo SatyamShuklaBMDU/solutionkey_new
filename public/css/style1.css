@@ -2234,12 +2234,16 @@ table.dataTable.dtr-inline.collapsed>tbody>tr.parent>th:first-child::before {
 }
 
 .header_iner {
-	background-color: #fff;
-	position: fixed;
-	z-index: 10;
-	padding: 30px;
-	margin: 27px 30px;
-	border-radius: 7px
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    z-index: 1000;
+    background-color: white; /* Make sure it has a background color */
+    border-bottom: 1px solid #ccc; /* Optional, for a border below the header */
+    padding: 0 15px; /* Optional, adjust padding as needed */
+	margin-left: 15% !important;
 }
 
 .fixed-header {
@@ -2726,7 +2730,7 @@ table.dataTable {
 	z-index: 99;
 	padding-bottom: 50px;
 	position: fixed;
-	width: 270px;
+	width: 228px;
 	z-index: 999;
 	overflow: hidden;
 	overflow-y: auto;
@@ -3284,13 +3288,14 @@ body::-webkit-scrollbar {
 }
 
 .main_content {
-	padding-left: 270px;
+	padding-left: 235px !important;
 	width: 100%;
 	padding-top: 0 !important;
 	transition: .5s;
 	position: relative;
 	min-height: 100vh;
 	padding-bottom: 100px;
+	margin-top: 50px !important;
 	overflow: hidden
 }
 

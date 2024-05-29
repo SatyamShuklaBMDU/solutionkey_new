@@ -33,7 +33,7 @@
 @section('content-area')
     {{-- section content --}}
     <section class="main_content dashboard_part">
-        <nav aria-label="breadcrumb" class="mb-5">
+        <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#"
                         style="text-decoration: none;color:#0d9603;font-weight:600;font-size:20px;">User Management</a></li>

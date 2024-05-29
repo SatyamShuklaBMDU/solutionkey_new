@@ -144,11 +144,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/notification/store', [NotificationController::class, 'store'])->name('notification-store');
     Route::delete('/delete-notification/{id}', [NotificationController::class, 'destroy'])->name('notification.destroy');
     // Document Route
-    Route::get('/customer/Documents', [DocumentController::class, 'index'])->name('customer-document');
+    Route::get('/customer/Documents/{id}', [DocumentController::class, 'index'])->name('customer-document');
+    Route::get('/api/customers', [CustomerController::class, 'getCustomers'])->name('api.customers');
     Route::post('/document/filter', [DocumentController::class, 'filter'])->name('document-filter');
     // Family Route
-    Route::get('/customer/Family', [FamilyController::class, 'index'])->name('customer-family');
-    Route::post('/fimily/filter', [FamilyController::class, 'filter'])->name('family-filter');
+    Route::get('/customer/Family/{id}', [FamilyController::class, 'index'])->name('customer-family');
+    Route::post('/fimily/filter/{id}', [FamilyController::class, 'filter'])->name('family-filter');
     Route::get('/family-details/{id}', [FamilyController::class, 'getCustomerDetails'])->name('family.details');
     //Booking Controller
     Route::get('/online/booking', [BookingController::class, 'online_booking'])->name('online-booking');

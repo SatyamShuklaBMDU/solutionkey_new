@@ -4,7 +4,6 @@
         .main_content {
             padding-left: 283px;
             padding-bottom: 0% !important;
-            margin: 0px !important;
         }
 
         .breadcrumb {
@@ -105,13 +104,13 @@
 @endsection
 @section('content-area')
     <section class="main_content dashboard_part">
-        <nav aria-label="breadcrumb" class="mb-5">
+        <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#"
-                        style="text-decoration: none;color:#0d9603 !important;font-weight:600;font-size:20px;">Services
+                        style="text-decoration: none;color:#0d9603 !important;font-weight:600;font-size:20px;">Category
                         Management</a></li>
                 <li class="breadcrumb-item active" aria-current="page"
-                    style="text-decoration: none;color:#033496 !important;font-weight:600;font-size:18px;">All Sub Services
+                    style="text-decoration: none;color:#033496 !important;font-weight:600;font-size:18px;">All Sub Category
                 </li>
             </ol>
         </nav>
@@ -135,7 +134,7 @@
                                     </div>
                                     <div class="col-sm-3 text-end" style="margin-top: 40px;">
                                         <a class="btn text-white shadow-lg" href="{{ route('sub-service-create') }}"
-                                            style="background-color:#0d9603;font-size:15px;">Create Sub Service</a>
+                                            style="background-color:#033496;font-size:15px;">Create Sub Category</a>
                                     </div>
                                 </div>
                             </form>
@@ -145,7 +144,7 @@
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Edit Sub Services</h5>
+                                        <h5 class="modal-title" id="exampleModalLabel">Edit Sub Category</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                     </div>
@@ -199,10 +198,10 @@
                                         <tr>
                                             <th>S No.</th>
                                             <th>Image</th>
-                                            <th>Date</th>
-                                            <th>Services Name</th>
-                                            <th>Sub Services Name</th>
-                                            <th>Description</th>
+                                            {{-- <th>Date</th> --}}
+                                            <th>Category Name</th>
+                                            <th>Sub Category Name</th>
+                                            {{-- <th>Description</th> --}}
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
@@ -220,11 +219,11 @@
                                                     </td>
                                                 @endif
 
-                                                <td>{{ \Carbon\Carbon::parse($service->created_at)->format('d M,Y') }}
-                                                </td>
+                                                {{-- <td>{{ \Carbon\Carbon::parse($service->created_at)->format('d M,Y') }}
+                                                </td> --}}
                                                 <td>{{ $service->services->services_name }}</td>
                                                 <td>{{ $service->name }}</td>
-                                                <td>{{ $service->description }}</td>
+                                                {{-- <td>{{ $service->description }}</td> --}}
                                                 <td>
                                                     @if ($service->status == 1)
                                                         <div class="job-status text-capitalize">Active</div>

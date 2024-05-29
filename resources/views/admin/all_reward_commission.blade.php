@@ -5,7 +5,6 @@
         .main_content {
             padding-left: 283px;
             padding-bottom: 0% !important;
-            margin: 0px !important;
         }
 
         .breadcrumb {
@@ -64,7 +63,7 @@
 
 @section('content-area')
     <section class="main_content dashboard_part">
-        <nav aria-label="breadcrumb" class="mb-2">
+        <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#"
                         style="text-decoration: none;color:#0d9603 !important;font-weight:600;font-size:20px;">Reward &

@@ -21,7 +21,7 @@
                                         {{ Session::get('login_message') }}
                                     </div>
                                 @endif
-                                <div class="quick_activity_wrap">
+                                <div class="quick_activity_wrap mt-2">
                                   
                                      <!--end col-->
                                     
