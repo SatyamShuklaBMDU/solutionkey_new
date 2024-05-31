@@ -78,13 +78,10 @@ class CustomerController extends Controller
 
     public function customerDetails(Request $request)
     {
-        $user = $request->user(); // Get the authenticated user
-        // Check if user exists
+        $user = $request->user();
         if ($user) {
-            // If the user exists, return the user details
             return response()->json(['success' => true, 'user' => $user], 200);
         } else {
-            // If the user does not exist (not authenticated), return an error response
             return response()->json(['success' => false, 'message' => 'User not authenticated'], 401);
         }
     }
@@ -93,16 +90,15 @@ class CustomerController extends Controller
     {
         try {
             $login = Auth::user();
-            // dd($login);
             $customer = Customer::findOrFail($login->id);
-            // dd($customer);
-            $validatedData = $request->validate([
-                'name' => 'string',
+    
+            $validator = Validator::make($request->all(), [
+                'name' => 'nullable|string',
                 'gender' => 'nullable|in:male,female,other',
                 'phone_number' => 'nullable|string',
-                'email' => 'email|unique:customers,email',
+                'email' => 'nullable|email|unique:customers,email,' . $customer->id,
                 'marital_status' => 'nullable|string',
-                'dob' => 'nullable|date',
+                'dob' => 'nullable|date_format:d-m-Y',
                 'city' => 'nullable|string',
                 'state' => 'nullable|string',
                 'address' => 'nullable|string',
@@ -110,31 +106,48 @@ class CustomerController extends Controller
                 'password' => 'nullable|string|min:6',
                 'pin_no' => 'nullable|string|min:4',
             ]);
+    
+            if ($validator->fails()) {
+                $response = ['status' => false];
+                foreach ($validator->errors()->toArray() as $field => $messages) {
+                    $response[$field] = $messages[0];
+                }
+                return response()->json($response, Response::HTTP_BAD_REQUEST);
+            }
+    
+            $validatedData = $validator->validated();
+    
             if ($request->has('dob') && $request->filled('dob')) {
                 $validatedData['dob'] = Carbon::createFromFormat('d-m-Y', $request->dob)->format('Y-m-d');
-            } else {
-                $validatedData['dob'] = null; // Set dob to null if not provided
             }
+    
             if ($request->hasFile('profile_pic') && $request->file('profile_pic')->isValid()) {
                 $photoFileName = uniqid() . '.' . $request->profile_pic->extension();
                 $photoPath = $request->file('profile_pic')->move(public_path('user/profile_pic'), $photoFileName);
                 $photoRelativePath = 'user/profile_pic/' . $photoFileName;
                 $validatedData['profile_pic'] = $photoRelativePath;
             }
+    
             if (isset($validatedData['password'])) {
                 $validatedData['password'] = Hash::make($validatedData['password']);
             }
-            $customer->update($validatedData);
-            return response()->json(['message' => 'Customer details updated successfully', 'data' => $customer]);
+            foreach ($validatedData as $key => $value) {
+                if ($request->has($key)) {
+                    $customer->$key = $value;
+                }
+            }
+            $customer->save();
+            return response()->json(['status' => true, 'message' => 'Customer details updated successfully', 'data' => $customer]);
+    
         } catch (ValidationException $e) {
-            return response()->json(['error' => $e->validator->errors()], Response::HTTP_BAD_REQUEST);
+            return response()->json(['status' => false, 'error' => $e->validator->errors()], Response::HTTP_BAD_REQUEST);
         } catch (QueryException $e) {
-            return response()->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json(['status' => false, 'error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json(['status' => false, 'error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-    public function login(Request $request)
+        public function login(Request $request)
     {
         try {
             $request->validate([
@@ -284,7 +297,6 @@ class CustomerController extends Controller
             return response()->json(['message' => 'Added successfully', 'user' => $user], 201);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Registration failed. Please try again later.'], 500);
-            // return response()->json(['error' => $e->getMessage()], 500);
         }
     }
     public function addToWishlist(Request $request)

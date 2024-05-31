@@ -22,9 +22,7 @@
                                     </div>
                                 @endif
                                 <div class="quick_activity_wrap mt-2">
-                                  
                                      <!--end col-->
-                                    
                                          <div class="single_quick_activity">
                                         <h4>User
                                             Management</h4>
@@ -32,9 +30,7 @@
                                         </h3>
                                         <p>Saved 25%</p>
                                     </div>
-                                  
                                     <!--end col-->
-                                   
                                             <div class="single_quick_activity">
                                         <h4>Service
                                             Management</h4>
@@ -54,7 +50,6 @@
                                     </div>
                                         
                                     <!--end col-->
-                                 
                                              <div class="single_quick_activity">
                                         <h4>Customer
                                             Management</h4>
