@@ -14,12 +14,10 @@
         /* Main menu items */
         .nav-item>.nav-link {
             color: #212529;
-            /* Change as needed */
             padding: 12px 20px;
             font-size: 16px;
             text-decoration: none;
             position: relative;
-            /* Ensure relative positioning for arrow */
         }
 
         /* Active menu item */

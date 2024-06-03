@@ -91,7 +91,6 @@ class CustomerController extends Controller
         try {
             $login = Auth::user();
             $customer = Customer::findOrFail($login->id);
-    
             $validator = Validator::make($request->all(), [
                 'name' => 'nullable|string',
                 'gender' => 'nullable|in:male,female,other',
@@ -105,6 +104,9 @@ class CustomerController extends Controller
                 'profile_pic' => 'nullable|image|max:2048',
                 'password' => 'nullable|string|min:6',
                 'pin_no' => 'nullable|string|min:4',
+                'designation' => 'nullable|string',
+                'company_name' => 'nullable|string',
+                'pincode' => 'nullable|string',
             ]);
     
             if ($validator->fails()) {
@@ -147,7 +149,7 @@ class CustomerController extends Controller
             return response()->json(['status' => false, 'error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-        public function login(Request $request)
+    public function login(Request $request)
     {
         try {
             $request->validate([
@@ -173,58 +175,21 @@ class CustomerController extends Controller
         return $inputPin === $storedPin;
     }
 
-    // public function logout(Request $request)
-    // {
-    //     $request->user('customers')->tokens()->delete();
-
-    //     return response()->json(['message' => 'Successfully logged out'], 200);
-    // }
     public function logout(Request $request)
     {
-        // Check if the user is authenticated
         if (Auth::user()) {
-            // Revoke the current user's token
             $request->user()->tokens()->delete();
-
-            // Return a response indicating successful logout
             return response()->json([
                 'message' => 'Logout successful',
                 'status' => 'success',
             ], 200);
         } else {
-            // Return an error response if the user is not authenticated
             return response()->json([
                 'message' => 'User not authenticated',
                 'status' => 'error',
             ], 401);
         }
     }
-
-//  public function logout()
-// {
-//     // Check if the user is authenticated
-//     if (Auth::user()) {
-//         // Retrieve the authenticated user (customer) and delete all their tokens
-//         // Auth::user()->tokens()->delete();
-//         $user = Auth::user();
-//         $token = $user->token();
-
-//         // Delete the token
-//         $token->delete();
-
-//         // Return a response indicating successful logout
-//         return response()->json([
-//             'message' => 'Logout Success',
-//             'status' => 'success'
-//         ], 200);
-//     } else {
-//         // Return an error response if the user is not authenticated
-//         return response()->json([
-//             'message' => 'User not authenticated',
-//             'status' => 'error'
-//         ], 401);
-//     }
-// }
 
     public function document(Request $request)
     {
@@ -235,7 +200,11 @@ class CustomerController extends Controller
                 // 'customer_id' => 'required|exists:customers,id',
             ]);
             if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 400);
+                $response = ['status' => false];
+                foreach ($validator->errors()->toArray() as $field => $messages) {
+                    $response[$field] = $messages[0];
+                }
+                return response()->json($response, Response::HTTP_BAD_REQUEST);
             }
             $description = $request->document_description;
             $documents = [];
@@ -276,7 +245,11 @@ class CustomerController extends Controller
                 'password' => 'nullable|string|min:8',
             ]);
             if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 422);
+                $response = ['status' => false];
+                foreach ($validator->errors()->toArray() as $field => $messages) {
+                    $response[$field] = $messages[0];
+                }
+                return response()->json($response, Response::HTTP_BAD_REQUEST);
             }
             $request->merge(['dob' => Carbon::createFromFormat('d-m-Y', $request->dob)->format('Y-m-d')]);
             $customerId = Auth::id();
@@ -292,7 +265,7 @@ class CustomerController extends Controller
                 'marital_status' => $request->marital_status,
                 'city' => $request->city,
                 'state' => $request->state,
-                'password' => Hash::make($request->password),
+                'password' => Hash::make('12345678'),
             ]);
             return response()->json(['message' => 'Added successfully', 'user' => $user], 201);
         } catch (\Exception $e) {
