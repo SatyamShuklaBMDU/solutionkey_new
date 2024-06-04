@@ -41,8 +41,8 @@ Route::prefix('customer')->group(function () {
     Route::post('/login', [CustomerController::class, 'login']);
     Route::post('/logout', [CustomerController::class, 'logout'])->middleware('auth:sanctum');
     Route::post('/reviews', [ReviewController::class, 'store'])->middleware('auth:sanctum');
-    Route::post('/feedback', [FeedbackController::class, 'addFeedback'])->middleware('auth:sanctum');
-    Route::get('/feedback', [FeedbackController::class, 'GetFeedback'])->middleware('auth:sanctum');
+    Route::post('/put-feedback', [FeedbackController::class, 'addFeedback'])->middleware('auth:sanctum');
+    Route::get('/get-feedback', [FeedbackController::class, 'GetFeedback'])->middleware('auth:sanctum');
     Route::post('/complaint', [FeedbackController::class, 'addComplaint'])->middleware('auth:sanctum');
     Route::get('/complaint', [FeedbackController::class, 'Getcomplaint'])->middleware('auth:sanctum');
     Route::post('/vendor-time-slots', [SlotController::class, 'getVendorTimeSlots']);
@@ -53,23 +53,6 @@ Route::prefix('customer')->group(function () {
     Route::any('/get-all-posts', [PostController::class, 'allposts']);
 });
 // Vendor Routes
-Route::prefix('vendor')->group(function () {
-    Route::post('/register', [VendorController::class, 'register']);
-    Route::post('/details', [VendorController::class, 'customerDetails'])->middleware('auth:sanctum');
-    Route::post('/update', [VendorController::class, 'update'])->middleware('auth:sanctum');
-    Route::post('/details', [VendorController::class, 'vendorDetails'])->middleware('auth:sanctum');
-    Route::post('/feedback', [VendorFeedbackController::class, 'addFeedback'])->middleware('auth:sanctum');
-    Route::get('/feedback', [VendorFeedbackController::class, 'GetFeedback'])->middleware('auth:sanctum');
-    Route::post('/complaint', [VendorFeedbackController::class, 'addcomplaint'])->middleware('auth:sanctum');
-    Route::get('/complaint', [VendorFeedbackController::class, 'Getcomplaint'])->middleware('auth:sanctum');
-    Route::post('/login', [VendorController::class, 'login']);
-    Route::post('/logout', [VendorController::class, 'logout'])->middleware('auth:sanctum');
-    Route::post('/change-password', [VendorController::class, 'changePassword'])->middleware('auth:sanctum');
-    Route::post('/posts', [PostController::class, 'store'])->middleware('auth:sanctum');
-    Route::post('/posts/update', [PostController::class, 'update'])->middleware('auth:sanctum');
-    Route::post('/blogs/register', [BlogController::class, 'register'])->middleware('auth:sanctum');
-    Route::post('/schedule_slots', [SlotController::class, 'scheduleSlot']);
-});
 Route::prefix('posts')->group(function () {
     Route::post('/comments', [CommentController::class, 'store'])->middleware('auth:sanctum');
     Route::post('/likes', [LikeController::class, 'store'])->middleware('auth:sanctum');

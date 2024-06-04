@@ -69,6 +69,4 @@ class VendorFeedbackController extends Controller
         return response()->json(['status' => false, 'message' => 'Complaint not found'],400);
         }
     }
-    
-
 }

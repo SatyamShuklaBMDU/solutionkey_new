@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\Response;
 
 class PostController extends Controller
 {
@@ -113,11 +114,11 @@ class PostController extends Controller
                     'updated_at' => $post->updated_at,
                 ];
             })->toArray();
-            return response()->json(['message' => "All Posts", 'posts' => $postinarray], 200);
+            return response()->json(['status' => true, 'message' => "All Posts", 'posts' => $postinarray], Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Resource not found'], 404);
+            return response()->json(['status' => false, 'error' => 'Resource not found'], Response::HTTP_NOT_FOUND);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Internal Server Error'], 500);
+            return response()->json(['status' => false, 'error' => 'Internal Server Error'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

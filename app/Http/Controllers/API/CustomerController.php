@@ -108,7 +108,7 @@ class CustomerController extends Controller
                 'company_name' => 'nullable|string',
                 'pincode' => 'nullable|string',
             ]);
-    
+
             if ($validator->fails()) {
                 $response = ['status' => false];
                 foreach ($validator->errors()->toArray() as $field => $messages) {
@@ -116,20 +116,20 @@ class CustomerController extends Controller
                 }
                 return response()->json($response, Response::HTTP_BAD_REQUEST);
             }
-    
+
             $validatedData = $validator->validated();
-    
+
             if ($request->has('dob') && $request->filled('dob')) {
                 $validatedData['dob'] = Carbon::createFromFormat('d-m-Y', $request->dob)->format('Y-m-d');
             }
-    
+
             if ($request->hasFile('profile_pic') && $request->file('profile_pic')->isValid()) {
                 $photoFileName = uniqid() . '.' . $request->profile_pic->extension();
                 $photoPath = $request->file('profile_pic')->move(public_path('user/profile_pic'), $photoFileName);
                 $photoRelativePath = 'user/profile_pic/' . $photoFileName;
                 $validatedData['profile_pic'] = $photoRelativePath;
             }
-    
+
             if (isset($validatedData['password'])) {
                 $validatedData['password'] = Hash::make($validatedData['password']);
             }
@@ -140,7 +140,7 @@ class CustomerController extends Controller
             }
             $customer->save();
             return response()->json(['status' => true, 'message' => 'Customer details updated successfully', 'data' => $customer]);
-    
+
         } catch (ValidationException $e) {
             return response()->json(['status' => false, 'error' => $e->validator->errors()], Response::HTTP_BAD_REQUEST);
         } catch (QueryException $e) {
@@ -159,14 +159,15 @@ class CustomerController extends Controller
             $customer = Customer::where('phone_number', $request->phone_number)->first();
             if ($customer && $this->validatePin($request->pin_no, $customer->pin_no)) {
                 $token = $customer->createToken('CustomerToken')->plainTextToken;
-                return response()->json(['message' => 'Login Successfully', 'token' => $token, 'id' => $customer->id], 200);
+                return response()->json(['status' => true, 'message' => 'Login Successfully', 'token' => $token, 'id' => $customer->id], Response::HTTP_OK);
             } else {
                 throw ValidationException::withMessages([
+                    'status' => false,
                     'phone_number' => ['The provided credentials are incorrect.'],
                 ]);
             }
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 401);
+            return response()->json(['status' => false, 'error' => $e->getMessage()], Response::HTTP_UNAUTHORIZED);
         }
     }
 
@@ -180,14 +181,14 @@ class CustomerController extends Controller
         if (Auth::user()) {
             $request->user()->tokens()->delete();
             return response()->json([
+                'status' => true,
                 'message' => 'Logout successful',
-                'status' => 'success',
-            ], 200);
+            ], Response::HTTP_OK);
         } else {
             return response()->json([
+                'status' => false,
                 'message' => 'User not authenticated',
-                'status' => 'error',
-            ], 401);
+            ], Response::HTTP_UNAUTHORIZED);
         }
     }
 
@@ -195,6 +196,7 @@ class CustomerController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
+                'documents_images' => 'required|array',
                 'documents_images.*' => 'required|file',
                 'document_description' => 'required',
                 // 'customer_id' => 'required|exists:customers,id',
@@ -221,11 +223,11 @@ class CustomerController extends Controller
                     $documents[] = $document;
                 }
             }
-            return response()->json(['message' => 'Documents Uploaded successfully', 'data' => $documents]);
+            return response()->json(['status' => true, 'message' => 'Documents Uploaded successfully', 'data' => $documents], Response::HTTP_CREATED);
         } catch (QueryException $e) {
-            return response()->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json(['status' => false, 'error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json(['status' => false, 'error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -267,9 +269,9 @@ class CustomerController extends Controller
                 'state' => $request->state,
                 'password' => Hash::make('12345678'),
             ]);
-            return response()->json(['message' => 'Added successfully', 'user' => $user], 201);
+            return response()->json(['status' => true, 'message' => 'Added successfully', 'user' => $user], Response::HTTP_CREATED);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Registration failed. Please try again later.'], 500);
+            return response()->json(['status' => false, 'error' => 'Registration failed. Please try again later.'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
     public function addToWishlist(Request $request)
@@ -283,9 +285,9 @@ class CustomerController extends Controller
                 'customer_id' => $customerId,
                 'vendor_id' => $request->vendor_id,
             ]);
-            return response()->json(['message' => 'Vendor added to wishlist successfully', 'wishlistItem' => $wishlistItem], 201);
+            return response()->json(['status' => true, 'message' => 'Vendor added to wishlist successfully', 'wishlistItem' => $wishlistItem], Response::HTTP_CREATED);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Failed to add vendor to wishlist'], 500);
+            return response()->json(['status' => false, 'error' => 'Failed to add vendor to wishlist'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
     private function isValidReferralNumber($referralNumber)
@@ -301,7 +303,7 @@ class CustomerController extends Controller
     public function allvendors(Request $request)
     {
         $vendors = Vendor::all();
-        $profile = "https://qbacp.com/solutionkey/public";
+        $profile = "https://bmdublog.com/SolutionkeyPartner/public";
         $vendorsArray = $vendors->map(function ($vendor) use ($profile) {
             return [
                 'id' => $vendor->id,
@@ -320,7 +322,7 @@ class CustomerController extends Controller
                 'cover_picture' => $profile . '/' . $vendor->cover_picture,
             ];
         })->toArray();
-        return response()->json(['status' => 'Success', 'vendors' => $vendorsArray, 'message' => 'Data Successfully'], 200);
+        return response()->json(['status' => true, 'vendors' => $vendorsArray, 'message' => 'Data Successfully'], Response::HTTP_OK);
     }
 
     public function getVendorById(Request $request)
@@ -328,10 +330,10 @@ class CustomerController extends Controller
         try {
             $vendor = Vendor::with('posts')->find($request->id);
             if (!$vendor) {
-                return response()->json(['error' => 'Vendor not found'], 404);
+                return response()->json(['status' => false, 'error' => 'Vendor not found'], Response::HTTP_NOT_FOUND);
             }
-            $profileUrl = "https://qbacp.com/solutionkey/public";
-            $posturl = "https://qbacp.com/solutionkey/public/images/posts/";
+            $profileUrl = "https://bmdublog.com/SolutionkeyPartner/public";
+            $posturl = "https://bmdublog.com/SolutionkeyPartner/public/images/posts/";
             $vendorArray = [
                 'id' => $vendor->id,
                 'vendor_id' => $vendor->vendor_id,
@@ -368,9 +370,9 @@ class CustomerController extends Controller
                     ];
                 })->toArray(),
             ];
-            return response()->json(['status' => 'Success', 'message' => 'Data Successfully', 'vendor' => $vendorArray], 200);
+            return response()->json(['status' => true, 'message' => 'Data Successfully', 'vendor' => $vendorArray], Response::HTTP_OK);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Internal Server Error'], 500);
+            return response()->json(['status' => false, 'error' => 'Internal Server Error'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

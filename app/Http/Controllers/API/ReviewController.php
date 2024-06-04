@@ -6,22 +6,21 @@ use App\Http\Controllers\Controller;
 use App\Models\Review;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\Response;
 
 class ReviewController extends Controller
 {
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            // 'customers_id' => 'required|exists:customers,id',
             'vendors_id' => 'required|exists:vendors,id',
             'rating' => 'required|integer|between:0,5',
             'content' => 'nullable|string',
         ]);
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 400);
+            return response()->json(['status' => false, 'error' => $validator->errors()], Response::HTTP_BAD_REQUEST);
         }
         try {
             $review = Review::create([
@@ -34,13 +33,12 @@ class ReviewController extends Controller
             $data['vendors_detail'] = $review->vendor->name;
             $data['rating'] = $review->rating;
             $data['content'] = $review->content;
-            return response()->json(['message' => 'Review created successfully', 'data' => $data], 201);
+            return response()->json(['status' => true, 'message' => 'Review created successfully', 'data' => $data], Response::HTTP_CREATED);
         } catch (QueryException $e) {
-            return response()->json(['error' => 'Failed to create review'], 500);
+            return response()->json(['status' => false, 'error' => 'Failed to create review'], Response::HTTP_INTERNAL_SERVER_ERROR);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Something went wrong'], 500);
+            return response()->json(['status' => false, 'error' => 'Something went wrong'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
-    
 }

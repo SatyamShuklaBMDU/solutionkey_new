@@ -169,7 +169,7 @@
                                                     <td class="text-center">{{ date('d-m-Y', strtotime($vendors->created_at)) }}</td>
                                                     <td class="text-center">{{ $vendors->vendor_id }}</td>
                                                     <td class="text-center">{{ $vendors->name }}</td>
-                                                    <td class="text-center">{{ $vendors->whatsapp_number }}</td>
+                                                    <td class="text-center">{{ $vendors->phone_number }}</td>
                                                     <td class="text-center">{{ $vendors->email }}</td>
                                                     <td class="text-center">
                                                         <div class="d-flex">
