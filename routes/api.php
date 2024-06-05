@@ -52,7 +52,6 @@ Route::prefix('customer')->group(function () {
     Route::post('/specific-vendors-all', [CustomerController::class, 'getVendorById']);
     Route::any('/get-all-posts', [PostController::class, 'allposts']);
 });
-// Vendor Routes
 Route::prefix('posts')->group(function () {
     Route::post('/comments', [CommentController::class, 'store'])->middleware('auth:sanctum');
     Route::post('/likes', [LikeController::class, 'store'])->middleware('auth:sanctum');

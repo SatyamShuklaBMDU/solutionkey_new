@@ -12,36 +12,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PostController extends Controller
 {
-    // public function store(Request $request)
-    // {
-    //     try {
-    //         // Auth::user();
-    //         // dd($login->id);
-    //         $validator = Validator::make($request->all(), [
-    //             'content' => 'required|string',
-    //             'post_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Adjust max file size as needed
-    //             'vendor_id' => 'required|exists:vendors,id',
-    //         ]);
-    //         if ($validator->fails()) {
-    //             return response()->json(['errors' => $validator->errors()], 400);
-    //         }
-    //         $post = new Post();
-    //         $post->content = $request->input('content');
-    //         $post->vendor_id = $request->input('vendor_id');
-    //         if ($request->hasFile('post_image')) {
-    //             $image = $request->file('post_image');
-    //             $imageName = time() . '.' . $image->getClientOriginalExtension();
-    //             $image->move(public_path('images/posts'), $imageName);
-    //             $post->post_image = $imageName;
-    //         }
-    //         $post->save();
-    //         return response()->json(['message' => 'Post created successfully', 'post' => $post], 201);
-    //     } catch (\Exception $e) {
-    //         return response()->json(['error' => 'Internal Server Error'], 500);
-    //         // return response()->json(['error' => $e->getMessage()], 500);
-    //     }
-    // }
-
     public function store(Request $request)
     {
         try {
@@ -103,7 +73,7 @@ class PostController extends Controller
     {
         try {
             $posts = Post::with('vendor')->get();
-            $posturl = "https://qbacp.com/solutionkey/public/images/posts/";
+            $posturl = "https://bmdublog.com/SolutionkeyPartner/public/images/posts/";
             $postinarray = $posts->map(function ($post) use ($posturl) {
                 return [
                     'id' => $post->id,
