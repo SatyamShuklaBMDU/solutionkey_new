@@ -16,6 +16,9 @@ class VendorController extends Controller
     public function showdetails($id)
     {
         $vendor = Vendor::find($id);
+        $vendor->profile_picture = 'https://bmdublog.com/SolutionkeyPartner/public/vendor/' . $vendor->profile_picture;
+        $vendor->cover_picture = 'https://bmdublog.com/SolutionkeyPartner/public/vendor/' . $vendor->cover_pic;
+        dd($vendor);
         if ($vendor) {
             return response()->json($vendor);
         } else {

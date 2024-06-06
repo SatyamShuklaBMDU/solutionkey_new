@@ -301,8 +301,8 @@
                     fetch(url)
                         .then(response => response.json())
                         .then(data => {
-                            var profilePicture = "{{ asset('') }}" + data.profile_picture;
-                            var coverPicture = "{{ asset('') }}" + data.cover_picture;
+                            var profilePicture = data.profile_picture;
+                            var coverPicture = data.cover_picture;
                             var content = `
                                 <p><strong>Vendor ID:</strong> ${data.vendor_id}</p>
                                 <p><strong>Name:</strong> ${data.name}</p>
