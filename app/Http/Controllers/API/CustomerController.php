@@ -24,33 +24,22 @@ class CustomerController extends Controller
     public function register(Request $request)
     {
         try {
-            $validatedData = $request->validate([
+            $validator = Validator::make($request->all(), [
                 'name' => 'required|string',
                 'pin_no' => 'required|string|min:4',
                 'phone_number' => 'required|string|unique:customers,phone_number',
-                'gender' => 'nullable|in:male,female,other',
-                'email' => 'nullable|email|unique:customers,email',
-                'marital_status' => 'nullable|string',
-                'dob' => 'nullable|date',
-                'city' => 'nullable|string',
-                'state' => 'nullable|string',
-                'address' => 'nullable|string',
-                'profile_pic' => 'nullable|image|max:2048',
                 // 'password' => 'required|string|min:6',
 
             ]);
-            if ($request->has('dob') && $request->filled('dob')) {
-                $validatedData['dob'] = Carbon::createFromFormat('d-m-Y', $request->dob)->format('Y-m-d');
-            } else {
-                $validatedData['dob'] = null; // Set dob to null if not provided
+            if ($validator->fails()) {
+                $response = ['status' => false];
+                foreach ($validator->errors()->toArray() as $field => $messages) {
+                    $response[$field] = $messages[0];
+                }
+                return response()->json($response, Response::HTTP_BAD_REQUEST);
             }
+            $validatedData = $validator->validated();
             $validatedData['password'] = Hash::make('12345678');
-            if ($request->hasFile('profile_pic')) {
-                $file = $request->file('profile_pic');
-                $fileName = $file->getClientOriginalName();
-                $file->move(public_path('profile_pics'), $fileName);
-                $validatedData['profile_pic'] = 'profile_pics/' . $fileName;
-            }
             $randomDigits = mt_rand(10000, 99999);
             $referralCode = 'SOLU' . $randomDigits;
             $CustomerId = 'CUST' . $randomDigits;
@@ -67,9 +56,7 @@ class CustomerController extends Controller
                     return response()->json(['message' => 'Invalid referral number.', 'success' => false], 200);
                 }
             }
-            return response()->json(['message' => 'Customer registered successfully', 'data' => $customer], Response::HTTP_CREATED);
-        } catch (ValidationException $e) {
-            return response()->json(['error' => $e->validator->errors()], Response::HTTP_BAD_REQUEST);
+            return response()->json(['status' => true, 'message' => 'Customer registered successfully', 'data' => $customer], Response::HTTP_CREATED);
         } catch (QueryException $e) {
             // return response()->json(['error' => 'Failed to register customer.'], Response::HTTP_INTERNAL_SERVER_ERROR);
             return response()->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
