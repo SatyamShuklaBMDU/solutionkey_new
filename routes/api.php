@@ -32,7 +32,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 // Customer Routes
 Route::prefix('customer')->group(function () {
-    Route::any('/register', [CustomerController::class, 'register']);
+    Route::any('/sign-up', [CustomerController::class, 'register']);
     Route::post('/details', [CustomerController::class, 'customerDetails'])->middleware('auth:sanctum');
     Route::post('/document', [CustomerController::class, 'document'])->middleware('auth:sanctum');
     Route::post('/wishlist/add', [CustomerController::class, 'addToWishlist'])->middleware('auth:sanctum');
