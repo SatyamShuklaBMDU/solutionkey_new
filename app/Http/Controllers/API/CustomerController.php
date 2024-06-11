@@ -264,17 +264,31 @@ class CustomerController extends Controller
     public function addToWishlist(Request $request)
     {
         try {
-            $request->validate([
+            $validator = Validator::make($request->all(), [
                 'vendor_id' => 'required|exists:vendors,id',
             ]);
+            if ($validator->fails()) {
+                $response = ['status' => false];
+                foreach ($validator->errors()->toArray() as $field => $messages) {
+                    $response[$field] = $messages[0];
+                }
+                return response()->json($response, Response::HTTP_BAD_REQUEST);
+            }
             $customerId = Auth::id();
+            $check = VendorWishlist::where('customer_id', $customerId)->where('vendors_id', $request->vendor_id)->exists();
+            if ($check) {
+                VendorWishlist::where('customer_id', $customerId)->where('vendors_id', $request->vendor_id)->delete();
+                return response()->json(['status' => true, 'message' => 'Vendor Removed Wishlist.']);
+            }
             $wishlistItem = VendorWishlist::create([
                 'customer_id' => $customerId,
-                'vendor_id' => $request->vendor_id,
+                'vendors_id' => $request->vendor_id,
             ]);
+            // dd($wishlistItem);
             return response()->json(['status' => true, 'message' => 'Vendor added to wishlist successfully', 'wishlistItem' => $wishlistItem], Response::HTTP_CREATED);
         } catch (\Exception $e) {
-            return response()->json(['status' => false, 'error' => 'Failed to add vendor to wishlist'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            // return response()->json(['status' => false, 'error' => 'Failed to add vendor to wishlist'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json(['status' => false, 'error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
     private function isValidReferralNumber($referralNumber)
