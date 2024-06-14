@@ -202,6 +202,12 @@
         @endif
         @if (auth()->check() && auth()->user()->hasPermission('reward'))
             <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('user-banners.index') ? 'active' : '' }}"
+                    href="{{ route('user-banners.index') }}">Banner</a>
+            </li>
+        @endif
+        @if (auth()->check() && auth()->user()->hasPermission('reward'))
+            <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('reward-commission') ? 'active' : '' }}"
                     href="{{ route('reward-commission') }}">Rewards & Commissions</a>
             </li>

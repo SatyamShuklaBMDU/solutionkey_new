@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\BannerController;
 use App\Http\Controllers\API\BlogController;
 use App\Http\Controllers\API\CommentController;
 use App\Http\Controllers\API\CustomerController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\API\LikeController;
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\API\ReferralController;
 use App\Http\Controllers\API\ReviewController;
+use App\Http\Controllers\API\ServiceController;
 use App\Http\Controllers\API\SlotController;
 use App\Http\Controllers\API\VendorController;
 use App\Http\Controllers\API\VendorFeedbackController;
@@ -51,9 +53,10 @@ Route::prefix('customer')->group(function () {
     Route::any('/vendors-all', [CustomerController::class, 'allvendors']);
     Route::post('/specific-vendors-all', [CustomerController::class, 'getVendorById']);
     Route::any('/get-all-posts', [PostController::class, 'allposts']);
+    Route::get('home-banner',[BannerController::class,'index'])->middleware('auth:sanctum');
+    Route::get('/get-category',[ServiceController::class,'index'])->middleware('auth:sanctum');
 });
 Route::prefix('posts')->group(function () {
     Route::post('/comments', [CommentController::class, 'store'])->middleware('auth:sanctum');
     Route::post('/likes', [LikeController::class, 'store'])->middleware('auth:sanctum');
 });
-

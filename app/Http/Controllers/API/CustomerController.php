@@ -67,9 +67,9 @@ class CustomerController extends Controller
     {
         $user = $request->user();
         if ($user) {
-            return response()->json(['success' => true, 'user' => $user], 200);
+            return response()->json(['status' => true, 'user' => $user], 200);
         } else {
-            return response()->json(['success' => false, 'message' => 'User not authenticated'], 401);
+            return response()->json(['status' => false, 'message' => 'User not authenticated'], 401);
         }
     }
 

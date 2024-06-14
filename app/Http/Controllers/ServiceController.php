@@ -99,7 +99,6 @@ class ServiceController extends Controller
         if (!$service) {
             return response()->json(['message' => 'Service not found'], 404);
         }
-
         $service->delete();
         return response()->json(['status' => true]);
     }

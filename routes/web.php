@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BannerController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ComplaintController;
@@ -15,12 +16,12 @@ use App\Http\Controllers\RewardCommissionController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SubServicesController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VendorComplaintController;
 use App\Http\Controllers\VendorController;
+use App\Http\Controllers\VendorFeedbackController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\VendorComplaintController;
-use App\Http\Controllers\VendorFeedbackController;
 
 /*
 |--------------------------------------------------------------------------
@@ -96,27 +97,27 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['permission:professionalmanagement'])->group(function () {
         Route::get('/vendor/show', [VendorController::class, 'show'])->name('vendor-show');
         Route::post('/change-vendor-account-status', [VendorController::class, 'changeAccountStatus'])->name('change.vendor.account.status');
-        Route::get('/api/get-vendor-details/{id}', [VendorController::class,'showdetails']);
+        Route::get('/api/get-vendor-details/{id}', [VendorController::class, 'showdetails']);
         Route::post('/vendor/filter', [VendorController::class, 'filter'])->name('vendor-filter');
     });
-     // FeedBack Route
+    // FeedBack Route
     Route::get('/feedback', [FeedbackController::class, 'index'])->name('feedback');
     Route::get('/vendor-feedback', [VendorFeedbackController::class, 'index'])->name('vendor-feedback');
-    Route::post('/vendor-feedback/filter',[VendorFeedbackController::class,'filter'])->name('vendor-feedback-filter');
+    Route::post('/vendor-feedback/filter', [VendorFeedbackController::class, 'filter'])->name('vendor-feedback-filter');
     Route::delete('/vendor-delete-feedback/{id}', [VendorFeedbackController::class, 'destroy'])->name('vendor-delete-feedback');
-    Route::post('/feedback/filter',[FeedbackController::class,'filter'])->name('feedback-filter');
+    Route::post('/feedback/filter', [FeedbackController::class, 'filter'])->name('feedback-filter');
     Route::delete('/delete-feedback/{id}', [FeedbackController::class, 'destroy'])->name('delete-feedback');
-    Route::post('/vendor-feedback-reply',[VendorFeedbackController::class,'reply'])->name('vendor-feedback-reply');
-    Route::post('/feedback-reply',[FeedbackController::class,'reply'])->name('feedback-reply');
+    Route::post('/vendor-feedback-reply', [VendorFeedbackController::class, 'reply'])->name('vendor-feedback-reply');
+    Route::post('/feedback-reply', [FeedbackController::class, 'reply'])->name('feedback-reply');
     // Complaint Route
     Route::get('/complaint', [ComplaintController::class, 'index'])->name('complaint');
-    Route::post('/complaint/filter',[ComplaintController::class,'filter'])->name('complaint-filter');
+    Route::post('/complaint/filter', [ComplaintController::class, 'filter'])->name('complaint-filter');
     Route::delete('/delete-complaint/{id}', [ComplaintController::class, 'destroy'])->name('delete-complaint');
     Route::get('/vendor-complaint', [VendorComplaintController::class, 'index'])->name('vendor-complaint');
-    Route::post('/vendor-complaint/filter',[VendorComplaintController::class,'filter'])->name('vendor-complaint-filter');
+    Route::post('/vendor-complaint/filter', [VendorComplaintController::class, 'filter'])->name('vendor-complaint-filter');
     Route::delete('/vendor-delete-complaint/{id}', [VendorComplaintController::class, 'destroy'])->name('vendor-delete-complaint');
-    Route::post('/vendor-complaint-reply',[VendorComplaintController::class,'reply'])->name('vendor-complaint-reply');
-    Route::post('/complaint-reply',[ComplaintController::class,'reply'])->name('complaint-reply');
+    Route::post('/vendor-complaint-reply', [VendorComplaintController::class, 'reply'])->name('vendor-complaint-reply');
+    Route::post('/complaint-reply', [ComplaintController::class, 'reply'])->name('complaint-reply');
     //Service Route
     Route::get('/sub-service', [SubServicesController::class, 'index'])->name('sub-service');
     Route::post('/sub-services-store', [SubServicesController::class, 'store'])->name('sub-service-store');
@@ -170,6 +171,14 @@ Route::middleware('auth')->group(function () {
     Route::put('reward-update/{service}', [RewardCommissionController::class, 'update'])->name('reward-update');
     Route::post('/reward/filter', [RewardCommissionController::class, 'filter'])->name('reward-filter');
     Route::get('/delete-reward/{id}', [RewardCommissionController::class, 'destroy'])->name('delete-reward');
+
+    // Banner Route
+    Route::get('user-banners', [BannerController::class, 'index'])->name('user-banners.index');
+    Route::get('user-banners/get', [BannerController::class, 'getBanners'])->name('get.banners');
+    Route::post('user-banners', [BannerController::class, 'store'])->name('user-banners.store');
+    Route::put('user-banners/{id}', [BannerController::class, 'update'])->name('user-banners.update');
+    Route::delete('user-banners/{id}', [BannerController::class, 'destroy'])->name('user-banners.destroy');
+    Route::put('user-banners/status/{id}', [BannerController::class, 'updateStatus'])->name('user-banners.updateStatus');
 });
 
 require __DIR__ . '/auth.php';
