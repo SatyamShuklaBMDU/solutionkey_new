@@ -27,7 +27,7 @@
 
         #customerTable {
             font-size: 16px;
-            / Adjust the font size as needed /
+            /* Adjust the font size as needed */
         }
 
         .dt-button {
@@ -45,13 +45,15 @@
             transform: translateX(-20px);
         }
 
-        / For DataTable / #customerTable_wrapper,
+        /* For DataTable */
+        #customerTable_wrapper,
         #customerTable th,
         #customerTable td {
             font-size: 15px;
         }
 
-        / For datepicker / .ui-datepicker {
+        /* For datepicker */
+        .ui-datepicker {
             font-size: 15px;
         }
 
@@ -71,49 +73,74 @@
             font-size: 15px;
         }
 
-        .vendor-status-switch {
-            --s: 18px;
-            /* adjust this to control the size*/
-
-            height: calc(var(--s) + var(--s)/5);
-            width: auto;
-            /* some browsers need this */
-            aspect-ratio: 2.25;
-            border-radius: var(--s);
-            margin: calc(var(--s)/2);
-            display: grid;
-            cursor: pointer;
-            background-color: #ff7a7a;
-            box-sizing: content-box;
+        .double-buttons {
+            display: inline-block;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            position: relative;
+            border-radius: 20px;
+            height: 40px;
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 12px;
+            font-weight: bold;
             overflow: hidden;
-            transition: .3s .1s;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
         }
 
-        .vendor-status-switch:before {
-            content: "";
-            padding: calc(var(--s)/10);
-            --_g: radial-gradient(circle closest-side at calc(100% - var(--s)/2) 50%, #000 96%, #0000);
-            background:
-                var(--_g) 0 /var(--_p, var(--s)) 100% no-repeat content-box,
-                var(--_g) var(--_p, 0)/var(--s) 100% no-repeat content-box,
-                #fff;
-            mix-blend-mode: darken;
-            filter: blur(calc(var(--s)/12)) contrast(11);
-            transition: .4s, background-position .4s .1s,
-                padding cubic-bezier(0, calc(var(--_i, -1)*200), 1, calc(var(--_i, -1)*200)) .25s .1s;
+        .double-buttons a {
+            display: inline-block;
+            padding: 0 30px;
+            line-height: 40px;
+            color: #444;
+            text-decoration: none;
+            text-transform: uppercase;
+            width: 100px;
         }
 
-        .vendor-status-switch:checked {
-            background-color: #85ff7a;
+        .double-buttons a:first-child {
+            border-right: 1px solid #ddd;
         }
 
-        .vendor-status-switch:checked:before {
-            padding: calc(var(--s)/10 + .05px) calc(var(--s)/10);
-            --_p: 100%;
-            --_i: 1;
+        .double-buttons a.pending:hover {
+            background-color: red;
+            color: #fff;
+        }
+
+        .double-buttons a.approved:hover {
+            background-color: green;
+            color: #fff;
+        }
+
+        .double-buttons a.active {
+            background-color: #444;
+            color: #fff;
+        }
+
+        .double-buttons .or {
+            position: absolute;
+            display: block;
+            width: 26px;
+            height: 26px;
+            line-height: 26px;
+            background-color: #fff;
+            border-radius: 100%;
+            border: 1px solid #ddd;
+            font-style: italic;
+            color: #666;
+            top: 50%;
+            left: 50%;
+            margin-top: -13px;
+            margin-left: -13px;
+            cursor: default;
+        }
+
+        .btn-status.active-approved {
+            background-color: green;
+            color: white;
+        }
+
+        .btn-status.active-pending {
+            background-color: red;
+            color: white;
         }
     </style>
 @endsection
@@ -159,29 +186,36 @@
                                                 <th class="text-center">Whatsapp number</th>
                                                 <th class="text-center">Email</th>
                                                 <th class="text-center">Action</th>
-                                                {{-- <th>Remark</th> --}}
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($vendor as $vendors)
                                                 <tr data-vendor-id="{{ $vendors->id }}">
                                                     <td class="text-center">{{ $loop->iteration }}</td>
-                                                    <td class="text-center">{{ date('d-m-Y', strtotime($vendors->created_at)) }}</td>
+                                                    <td class="text-center">
+                                                        {{ date('d-m-Y', strtotime($vendors->created_at)) }}</td>
                                                     <td class="text-center">{{ $vendors->vendor_id }}</td>
                                                     <td class="text-center">{{ $vendors->name }}</td>
                                                     <td class="text-center">{{ $vendors->phone_number }}</td>
                                                     <td class="text-center">{{ $vendors->email }}</td>
                                                     <td class="text-center">
                                                         <div class="d-flex">
-                                                            <button class="btn btn-info view-details"
+                                                            <button class="btn btn-info view-details me-2"
                                                                 data-vendor-id="{{ $vendors->id }}"><i
                                                                     class="fa fa-eye"></i></button>
-                                                            <input type="checkbox" class="vendor-status-switch"
-                                                                {{ $vendors->account_status == '1' ? 'checked' : '' }}
-                                                                data-vendor-id="{{ $vendors->id }}">
+                                                            <div class="double-buttons">
+                                                                <a href="#"
+                                                                    class="btn-status {{ $vendors->account_status == 1 ? 'active-approved' : '' }} approved"
+                                                                    data-vendor-id="{{ $vendors->id }}"
+                                                                    data-status="1">Approved</a>
+                                                                <a href="#"
+                                                                    class="btn-status {{ $vendors->account_status == 2 ? 'active-pending' : '' }} pending"
+                                                                    data-vendor-id="{{ $vendors->id }}"
+                                                                    data-status="2">Pending</a>
+                                                                <span class="or">or</span>
+                                                            </div>
                                                         </div>
                                                     </td>
-                                                    {{-- <td>{{ $vendors->deactivation_remark ?? '--' }}</td> --}}
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -214,6 +248,55 @@
 @endsection
 @section('script-area')
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var buttons = document.querySelectorAll('.view-details');
+            buttons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var vendorId = this.getAttribute('data-vendor-id');
+                    var url = `{{ url('api/get-vendor-details') }}/${vendorId}`;
+                    fetch(url)
+                        .then(response => response.json())
+                        .then(data => {
+                            var profilePicture = data.profile_picture;
+                            var coverPicture = data.cover_picture;
+                            var content = `
+                                    <p><strong>Vendor ID:</strong> ${data.vendor_id}</p>
+                                    <p><strong>Name:</strong> ${data.name}</p>
+                                    <p><strong>Highest Qualification:</strong> ${data.highest_qualification?data.highest_qualification:'N/A'}</p>
+                                    <p><strong>Designation:</strong> ${data.designation?data.designation:'N/A'}</p>
+                                    <p><strong>Area of Interest:</strong> ${data.area_of_interest?data.area_of_interest:'N/A'}</p>
+                                    <p><strong>WhatsApp Number:</strong> ${data.phone_number}</p>
+                                    <p><strong>Gender:</strong> ${data.gender}</p>
+                                    <p><strong>Email:</strong> ${data.email?data.email:"N/A"}</p>
+                                    <p><strong>Experience:</strong> ${data.experience?data.experience:'N/A'}</p>
+                                    <p><strong>Current Job:</strong> ${data.current_job? data.current_job : 'N/A'}</p>
+                                    <p><strong>Charge Per Minute for Audio Call:</strong> ${data.charge_per_minute_for_audio_call?data.charge_per_minute_for_audio_call:'N/A'}</p>
+                                    <p><strong>Charge Per Minute for Video Call:</strong> ${data.charge_per_minute_for_video_call?data.charge_per_minute_for_video_call:"N/A"}</p>
+                                    <p><strong>Charge Per Minute for Chat:</strong> ${data.charge_per_minute_for_chat?data.charge_per_minute_for_chat:'N/A'}</p>
+                                    <p><strong>Aadhar Number:</strong> ${data.adhar_number?data.adhar_number:"N/A"}</p>
+                                    <p><strong>PAN Number:</strong> ${data.pancard? data.pancard : 'N/A'}</p>
+                                    <p><strong>About:</strong> ${data.about?data.about:'N/A'}</p>
+                                    <p><strong>Pincode:</strong> ${data.pincode ? data.pincode : 'N/A'}</p>
+                                    <p><strong>City:</strong> ${data.city ? data.city : 'N/A'}</p>
+                                    <p><strong>State:</strong> ${data.state? data.state : 'N/A'}</p>
+                                    <p><strong>Address:</strong> ${data.address? data.address : 'N/A'}</p>
+                                    <p><strong>Profile Picture:</strong><br><img src="${profilePicture}" width="100px" height="100px"></p>
+                                    <p><strong>Cover Picture:</strong><br><img src="${coverPicture}" width="100px" height="100px"></p>
+                                    <p><strong>Account Status:</strong> ${data.account_status === 1 ? 'Approved' : 'Pending'}</p>
+                                    <p><strong>Deactivated At:</strong> ${data.deactivated_at ? data.deactivated_at : 'N/A'}</p>
+                                    <p><strong>Deactivation Remark:</strong> ${data.deactivation_remark ? data.deactivation_remark : 'N/A'}</p>
+                                `;
+
+                            document.querySelector('#vendorDetailsModal .modal-body').innerHTML = content;
+                            var vendorDetailsModal = new bootstrap.Modal(document.getElementById('vendorDetailsModal'));
+                            vendorDetailsModal.show();
+                        })
+                        .catch(error => {
+                            console.error('Error loading details:', error);
+                        });
+                });
+            });
+        });
         $(document).ready(function() {
             // Initialize DataTable
             $('#customerTable').DataTable({
@@ -222,16 +305,13 @@
                     'copy', 'csv', 'excel', 'pdf', 'print'
                 ]
             });
-
-            // Toggle switch change event with SweetAlert2
-            $('.vendor-status-switch').on('change', function() {
+            $('.double-buttons a').on('click', function(e) {
+                e.preventDefault();
                 var vendorID = $(this).data('vendor-id');
-                var isChecked = $(this).is(':checked');
-                var status = isChecked ? '1' : '0';
-
+                var status = $(this).data('status');
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: "You want to change status this vendor.",
+                    text: "You want to change the status of this vendor.",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -239,9 +319,8 @@
                     confirmButtonText: 'Yes, Do it!'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        var remark = '';
-                        if (!isChecked) {
-                            remark = Swal.fire({
+                        if (status == '2') {
+                            Swal.fire({
                                 title: 'Enter the reason for deactivation',
                                 input: 'text',
                                 inputAttributes: {
@@ -250,19 +329,22 @@
                                 showCancelButton: true,
                                 confirmButtonText: 'Submit',
                                 showLoaderOnConfirm: true,
+                                preConfirm: (remark) => {
+                                    if (!remark) {
+                                        Swal.showValidationMessage(
+                                            'Remark is required');
+                                    } else {
+                                        return remark;
+                                    }
+                                }
                             }).then(inputResult => {
                                 if (inputResult.isConfirmed) {
-                                    changeVendorStatus(vendorID, isChecked, inputResult
-                                        .value);
-                                } else {
-                                    $(this).prop('checked', !isChecked); // Reset the toggle
+                                    changeVendorStatus(vendorID, status, inputResult.value);
                                 }
                             });
                         } else {
-                            changeVendorStatus(vendorID, isChecked, remark);
+                            changeVendorStatus(vendorID, status, '');
                         }
-                    } else {
-                        $(this).prop('checked', !isChecked); // Reset the toggle
                     }
                 });
             });
@@ -281,67 +363,13 @@
                     },
                     success: function(response) {
                         Swal.fire('Updated!', 'The vendor status has been updated.', 'success');
+                        location.reload();
                     },
                     error: function(xhr, status, error) {
                         Swal.fire('Failed!', 'There was a problem changing the status.', 'error');
                     }
                 });
             }
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var buttons = document.querySelectorAll('.view-details');
-
-            buttons.forEach(function(button) {
-                button.addEventListener('click', function() {
-                    var vendorId = this.getAttribute('data-vendor-id');
-                    var url = `{{ url('api/get-vendor-details') }}/${vendorId}`;
-
-                    fetch(url)
-                        .then(response => response.json())
-                        .then(data => {
-                            var profilePicture = data.profile_picture;
-                            var coverPicture = data.cover_picture;
-                            var content = `
-                                <p><strong>Vendor ID:</strong> ${data.vendor_id}</p>
-                                <p><strong>Name:</strong> ${data.name}</p>
-                                <p><strong>Highest Qualification:</strong> ${data.highest_qualification?data.highest_qualification:'N/A'}</p>
-                                <p><strong>Designation:</strong> ${data.designation?data.designation:'N/A'}</p>
-                                <p><strong>Area of Interest:</strong> ${data.area_of_interest?data.area_of_interest:'N/A'}</p>
-                                <p><strong>WhatsApp Number:</strong> ${data.whatsapp_number}</p>
-                                <p><strong>Gender:</strong> ${data.gender}</p>
-                                <p><strong>Email:</strong> ${data.email?data.email:"N/A"}</p>
-                                <p><strong>Experience:</strong> ${data.experience?data.experience:'N/A'}</p>
-                                <p><strong>Current Job:</strong> ${data.current_job? data.current_job : 'N/A'}</p>
-                                <p><strong>Charge Per Minute for Audio Call:</strong> ${data.charge_per_minute_for_audio_call?data.charge_per_minute_for_audio_call:'N/A'}</p>
-                                <p><strong>Charge Per Minute for Video Call:</strong> ${data.charge_per_minute_for_video_call?data.charge_per_minute_for_video_call:"N/A"}</p>
-                                <p><strong>Charge Per Minute for Chat:</strong> ${data.charge_per_minute_for_chat?data.charge_per_minute_for_chat:'N/A'}</p>
-                                <p><strong>Aadhar Number:</strong> ${data.adhar_number?data.adhar_number:"N/A"}</p>
-                                <p><strong>PAN Number:</strong> ${data.pancard? data.pancard : 'N/A'}</p>
-                                <p><strong>About:</strong> ${data.about?data.about:'N/A'}</p>
-                                <p><strong>City:</strong> ${data.city ? data.city : 'N/A'}</p>
-                                <p><strong>State:</strong> ${data.state? data.state : 'N/A'}</p>
-                                <p><strong>Address:</strong> ${data.address? data.address : 'N/A'}</p>
-                                <p><strong>Status:</strong> ${data.status ? 'Active' : 'Inactive'}</p>
-                                <p><strong>Profile Picture:</strong><br><img src="${profilePicture}" width="100px" height="100px"></p>
-                                <p><strong>Cover Picture:</strong><br><img src="${coverPicture}" width="100px" height="100px"></p>
-                                <p><strong>Account Status:</strong> ${data.account_status ? 'Active' : 'Inactive'}</p>
-                                <p><strong>Deactivated At:</strong> ${data.deactivated_at ? data.deactivated_at : 'N/A'}</p>
-                                <p><strong>Deactivation Remark:</strong> ${data.deactivation_remark ? data.deactivation_remark : 'N/A'}</p>
-                            `;
-
-                            document.querySelector('#vendorDetailsModal .modal-body')
-                                .innerHTML = content;
-                            var vendorDetailsModal = new bootstrap.Modal(document
-                                .getElementById('vendorDetailsModal'));
-                            vendorDetailsModal.show();
-                        })
-                        .catch(error => {
-                            console.error('Error loading details:', error);
-                        });
-                });
-            });
         });
     </script>
 @endsection

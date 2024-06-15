@@ -6,6 +6,7 @@ use App\Http\Controllers\API\CommentController;
 use App\Http\Controllers\API\CustomerController;
 use App\Http\Controllers\API\FeedbackController;
 use App\Http\Controllers\API\FilterController;
+use App\Http\Controllers\API\FollowController;
 use App\Http\Controllers\API\LikeController;
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\API\ReferralController;
@@ -55,6 +56,8 @@ Route::prefix('customer')->group(function () {
     Route::any('/get-all-posts', [PostController::class, 'allposts']);
     Route::get('home-banner',[BannerController::class,'index'])->middleware('auth:sanctum');
     Route::get('/get-category',[ServiceController::class,'index'])->middleware('auth:sanctum');
+
+    Route::post('follow',[FollowController::class,'follow'])->middleware('auth:sanctum');
 });
 Route::prefix('posts')->group(function () {
     Route::post('/comments', [CommentController::class, 'store'])->middleware('auth:sanctum');

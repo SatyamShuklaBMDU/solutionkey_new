@@ -18,7 +18,6 @@ class VendorController extends Controller
         $vendor = Vendor::find($id);
         $vendor->profile_picture = 'https://bmdublog.com/SolutionkeyPartner/public/vendor/' . $vendor->profile_picture;
         $vendor->cover_picture = 'https://bmdublog.com/SolutionkeyPartner/public/vendor/' . $vendor->cover_pic;
-        dd($vendor);
         if ($vendor) {
             return response()->json($vendor);
         } else {
@@ -42,7 +41,6 @@ class VendorController extends Controller
     }
     public function changeAccountStatus(Request $request)
     {
-        // dd($request->all());
         $VendorId = $request->input('vendor_id');
         $newStatus = $request->input('new_status');
         $remark = $request->input('remark');
@@ -50,8 +48,8 @@ class VendorController extends Controller
         if (!$Vendor) {
             return response()->json(['success' => false, 'message' => 'Customer not found'], 404);
         }
-        $Vendor->account_status = $newStatus == "false" ? 0 : 1;
-        if ($newStatus == "false" && !empty($remark)) {
+        $Vendor->account_status = $newStatus;
+        if ($newStatus == "2" && !empty($remark)) {
             $Vendor->deactivation_remark = $remark;
             $Vendor->deactivated_at = Carbon::now();
         } else {
