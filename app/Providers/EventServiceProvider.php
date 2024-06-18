@@ -20,6 +20,10 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
             GenerateReferralCode::class,
         ],
+        NewFollowCreated::class=>[
+            CreateFollowActivity::class,
+            CreteUserFollowNotification::class
+        ]
     ];
 
     /**

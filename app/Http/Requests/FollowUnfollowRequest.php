@@ -22,16 +22,10 @@ class FollowUnfollowRequest extends FormRequest
      */
     public function rules(): array
     {
-        // dd('1');
         return [
-            'vendor_id'=>[
+            'vendor_id'=> [
                 'required',
-                'exists:vendors,id',
-                function($attribute, $value, $fail) {
-                    if($value === Auth::id()) {
-                        $fail("You cannot follow yourself, buddy.");
-                    }
-                }    
+                'exists:vendors,id',    
             ],
         ];
     }

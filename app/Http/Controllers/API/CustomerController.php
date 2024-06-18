@@ -27,7 +27,7 @@ class CustomerController extends Controller
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string',
                 'pin_no' => 'required|string|min:4',
-                'phone_number' => 'required|string|unique:customers,phone_number',
+                'phone_number' => 'required|min:10|string|unique:customers,phone_number',
                 // 'password' => 'required|string|min:6',
 
             ]);

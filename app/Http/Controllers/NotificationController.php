@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Notification;
+use App\Models\NotificationFor;
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
     public function index()
     {
-        $notification = Notification::all();
+        $notification = NotificationFor::all();
         return view('admin.all_notification',compact('notification'));
         
     }
@@ -27,7 +28,7 @@ class NotificationController extends Controller
         ]);
         // dd($validatedData);
         
-        $notification = new Notification();
+        $notification = new NotificationFor();
         $notification->for = $validatedData['for'];
         $notification->subject = $validatedData['subject'];
         $notification->message = $validatedData['message'];
@@ -42,7 +43,7 @@ class NotificationController extends Controller
         ]);
         $start = $request->start;
         $end = $request->end;
-        $notification = Notification::whereDate('created_at', '>=', $start)
+        $notification = NotificationFor::whereDate('created_at', '>=', $start)
             ->whereDate('created_at', '<=', $end)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -50,7 +51,7 @@ class NotificationController extends Controller
     }
     
     public function destroy($id){
-        $notification = Notification::find($id);
+        $notification = NotificationFor::find($id);
         $notification->delete();
         return response()->json(['success'=>'Deleted Successfully']);
     }

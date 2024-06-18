@@ -23,11 +23,12 @@ class Customer extends Authenticatable
         }
     }
 
-    public function unfollow(User $user) {
+    public function unfollow(Vendor $user) 
+    {
         Follow::where('customer_id', Auth::id())->where('vendor_id', $user->id)->delete();
     }
 
-    protected function isFollowing(Vendor $vendor)
+    public function isFollowing(Vendor $vendor)
     {
         return $this->following()->where('vendors.id', $vendor->id)->exists();
     }

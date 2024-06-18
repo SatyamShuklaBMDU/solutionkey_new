@@ -12,6 +12,14 @@ class FollowController extends Controller
 {
     public function follow(FollowUnfollowRequest $request){
         $vendorToFollow = Vendor::findOrfail(request('vendor_id'));
-        dd(Auth::user()->follow($vendorToFollow));
+        Auth::user()->follow($vendorToFollow);
+        return response()->noContent(200);
+    }
+
+    public function unfollow(FollowUnfollowRequest $request)
+    {
+        $vendorToUnFollow = Vendor::findOrfail(request('vendor_id'));
+        Auth::user()->unfollow($vendorToUnFollow);
+        return response()->noContent(200);
     }
 }

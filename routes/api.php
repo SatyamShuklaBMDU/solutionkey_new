@@ -5,9 +5,11 @@ use App\Http\Controllers\API\BlogController;
 use App\Http\Controllers\API\CommentController;
 use App\Http\Controllers\API\CustomerController;
 use App\Http\Controllers\API\FeedbackController;
+use App\Http\Controllers\API\FeedController;
 use App\Http\Controllers\API\FilterController;
 use App\Http\Controllers\API\FollowController;
 use App\Http\Controllers\API\LikeController;
+use App\Http\Controllers\API\NotificationController;
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\API\ReferralController;
 use App\Http\Controllers\API\ReviewController;
@@ -56,8 +58,11 @@ Route::prefix('customer')->group(function () {
     Route::any('/get-all-posts', [PostController::class, 'allposts']);
     Route::get('home-banner',[BannerController::class,'index'])->middleware('auth:sanctum');
     Route::get('/get-category',[ServiceController::class,'index'])->middleware('auth:sanctum');
-
+    Route::get('/get-notification',[NotificationController::class,'index']);
     Route::post('follow',[FollowController::class,'follow'])->middleware('auth:sanctum');
+    Route::post('Unfollow',[FollowController::class,'unfollow'])->middleware('auth:sanctum');
+    Route::get('feed',[FeedController::class,'index'])->middleware('auth:sanctum');
+    Route::get('notifications',[NotificationController::class,'sendNotify'])->middleware('auth:sanctum');
 });
 Route::prefix('posts')->group(function () {
     Route::post('/comments', [CommentController::class, 'store'])->middleware('auth:sanctum');
