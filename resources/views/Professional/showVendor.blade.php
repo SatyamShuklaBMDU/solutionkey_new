@@ -260,35 +260,37 @@
                             var profilePicture = data.profile_picture;
                             var coverPicture = data.cover_picture;
                             var content = `
-                                    <p><strong>Vendor ID:</strong> ${data.vendor_id}</p>
-                                    <p><strong>Name:</strong> ${data.name}</p>
-                                    <p><strong>Highest Qualification:</strong> ${data.highest_qualification?data.highest_qualification:'N/A'}</p>
-                                    <p><strong>Designation:</strong> ${data.designation?data.designation:'N/A'}</p>
-                                    <p><strong>Area of Interest:</strong> ${data.area_of_interest?data.area_of_interest:'N/A'}</p>
-                                    <p><strong>WhatsApp Number:</strong> ${data.phone_number}</p>
-                                    <p><strong>Gender:</strong> ${data.gender}</p>
-                                    <p><strong>Email:</strong> ${data.email?data.email:"N/A"}</p>
-                                    <p><strong>Experience:</strong> ${data.experience?data.experience:'N/A'}</p>
-                                    <p><strong>Current Job:</strong> ${data.current_job? data.current_job : 'N/A'}</p>
-                                    <p><strong>Charge Per Minute for Audio Call:</strong> ${data.charge_per_minute_for_audio_call?data.charge_per_minute_for_audio_call:'N/A'}</p>
-                                    <p><strong>Charge Per Minute for Video Call:</strong> ${data.charge_per_minute_for_video_call?data.charge_per_minute_for_video_call:"N/A"}</p>
-                                    <p><strong>Charge Per Minute for Chat:</strong> ${data.charge_per_minute_for_chat?data.charge_per_minute_for_chat:'N/A'}</p>
-                                    <p><strong>Aadhar Number:</strong> ${data.adhar_number?data.adhar_number:"N/A"}</p>
-                                    <p><strong>PAN Number:</strong> ${data.pancard? data.pancard : 'N/A'}</p>
-                                    <p><strong>About:</strong> ${data.about?data.about:'N/A'}</p>
-                                    <p><strong>Pincode:</strong> ${data.pincode ? data.pincode : 'N/A'}</p>
-                                    <p><strong>City:</strong> ${data.city ? data.city : 'N/A'}</p>
-                                    <p><strong>State:</strong> ${data.state? data.state : 'N/A'}</p>
-                                    <p><strong>Address:</strong> ${data.address? data.address : 'N/A'}</p>
-                                    <p><strong>Profile Picture:</strong><br><img src="${profilePicture}" width="100px" height="100px"></p>
-                                    <p><strong>Cover Picture:</strong><br><img src="${coverPicture}" width="100px" height="100px"></p>
-                                    <p><strong>Account Status:</strong> ${data.account_status === 1 ? 'Approved' : 'Pending'}</p>
-                                    <p><strong>Deactivated At:</strong> ${data.deactivated_at ? data.deactivated_at : 'N/A'}</p>
-                                    <p><strong>Deactivation Remark:</strong> ${data.deactivation_remark ? data.deactivation_remark : 'N/A'}</p>
-                                `;
+                        <p><strong>Vendor ID:</strong> ${data.vendor_id}</p>
+                        <p><strong>Name:</strong> ${data.name}</p>
+                        <p><strong>Highest Qualification:</strong> ${data.highest_qualification ? data.highest_qualification : 'N/A'}</p>
+                        <p><strong>Designation:</strong> ${data.designation ? data.designation : 'N/A'}</p>
+                        <p><strong>Area of Interest:</strong> ${data.area_of_interest ? data.area_of_interest : 'N/A'}</p>
+                        <p><strong>WhatsApp Number:</strong> ${data.phone_number}</p>
+                        <p><strong>Gender:</strong> ${data.gender}</p>
+                        <p><strong>Email:</strong> ${data.email ? data.email : "N/A"}</p>
+                        <p><strong>Experience:</strong> ${data.experience ? data.experience : 'N/A'}</p>
+                        <p><strong>Current Job:</strong> ${data.current_job ? data.current_job : 'N/A'}</p>
+                        <p><strong>Charge Per Minute for Audio Call:</strong> ${data.charge_per_minute_for_audio_call ? data.charge_per_minute_for_audio_call : 'N/A'}</p>
+                        <p><strong>Charge Per Minute for Video Call:</strong> ${data.charge_per_minute_for_video_call ? data.charge_per_minute_for_video_call : "N/A"}</p>
+                        <p><strong>Charge Per Minute for Chat:</strong> ${data.charge_per_minute_for_chat ? data.charge_per_minute_for_chat : 'N/A'}</p>
+                        <p><strong>Aadhar Number:</strong> ${data.adhar_number ? data.adhar_number : "N/A"}</p>
+                        <p><strong>PAN Number:</strong> ${data.pancard ? data.pancard : 'N/A'}</p>
+                        <p><strong>About:</strong> ${data.about ? data.about : 'N/A'}</p>
+                        <p><strong>Pincode:</strong> ${data.pincode ? data.pincode : 'N/A'}</p>
+                        <p><strong>City:</strong> ${data.city ? data.city : 'N/A'}</p>
+                        <p><strong>State:</strong> ${data.state ? data.state : 'N/A'}</p>
+                        <p><strong>Address:</strong> ${data.address ? data.address : 'N/A'}</p>
+                        <p><strong>Profile Picture:</strong><br><img src="${profilePicture}" width="100px" height="100px"></p>
+                        <p><strong>Cover Picture:</strong><br><img src="${coverPicture}" width="100px" height="100px"></p>
+                        <p><strong>Account Status:</strong> ${data.account_status === 1 ? 'Approved' : 'Pending'}</p>
+                        <p><strong>Deactivated At:</strong> ${data.deactivated_at ? data.deactivated_at : 'N/A'}</p>
+                        <p><strong>Deactivation Remark:</strong> ${data.deactivation_remark ? data.deactivation_remark : 'N/A'}</p>
+                    `;
 
-                            document.querySelector('#vendorDetailsModal .modal-body').innerHTML = content;
-                            var vendorDetailsModal = new bootstrap.Modal(document.getElementById('vendorDetailsModal'));
+                            document.querySelector('#vendorDetailsModal .modal-body')
+                                .innerHTML = content;
+                            var vendorDetailsModal = new bootstrap.Modal(document
+                                .getElementById('vendorDetailsModal'));
                             vendorDetailsModal.show();
                         })
                         .catch(error => {
@@ -296,80 +298,87 @@
                         });
                 });
             });
+
+            document.querySelectorAll('.double-buttons a').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    var vendorID = this.getAttribute('data-vendor-id');
+                    var status = this.getAttribute('data-status');
+
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You want to change the status of this vendor.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, Do it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            if (status == '2') {
+                                Swal.fire({
+                                    title: 'Enter the reason for deactivation',
+                                    input: 'text',
+                                    inputAttributes: {
+                                        autocapitalize: 'off'
+                                    },
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Submit',
+                                    showLoaderOnConfirm: true,
+                                    preConfirm: (remark) => {
+                                        if (!remark) {
+                                            Swal.showValidationMessage(
+                                                'Remark is required');
+                                        } else {
+                                            return remark;
+                                        }
+                                    }
+                                }).then(inputResult => {
+                                    if (inputResult.isConfirmed) {
+                                        changeVendorStatus(vendorID, status,
+                                            inputResult.value);
+                                    }
+                                });
+                            } else {
+                                changeVendorStatus(vendorID, status, '');
+                            }
+                        }
+                    });
+                });
+            });
+
+            function changeVendorStatus(vendorID, newStatus, remark) {
+                fetch("{{ route('change.vendor.account.status') }}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                'content')
+                        },
+                        body: JSON.stringify({
+                            vendor_id: vendorID,
+                            new_status: newStatus,
+                            remark: remark,
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        Swal.fire('Updated!', 'The vendor status has been updated.', 'success');
+                        location.reload();
+                    })
+                    .catch(error => {
+                        Swal.fire('Failed!', 'There was a problem changing the status.', 'error');
+                    });
+            }
         });
-        $(document).ready(function() {
-            // Initialize DataTable
-            $('#customerTable').DataTable({
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var customerTable = new DataTable('#customerTable', {
                 dom: 'Bfrtip',
                 buttons: [
                     'copy', 'csv', 'excel', 'pdf', 'print'
                 ]
             });
-            $('.double-buttons a').on('click', function(e) {
-                e.preventDefault();
-                var vendorID = $(this).data('vendor-id');
-                var status = $(this).data('status');
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You want to change the status of this vendor.",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, Do it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        if (status == '2') {
-                            Swal.fire({
-                                title: 'Enter the reason for deactivation',
-                                input: 'text',
-                                inputAttributes: {
-                                    autocapitalize: 'off'
-                                },
-                                showCancelButton: true,
-                                confirmButtonText: 'Submit',
-                                showLoaderOnConfirm: true,
-                                preConfirm: (remark) => {
-                                    if (!remark) {
-                                        Swal.showValidationMessage(
-                                            'Remark is required');
-                                    } else {
-                                        return remark;
-                                    }
-                                }
-                            }).then(inputResult => {
-                                if (inputResult.isConfirmed) {
-                                    changeVendorStatus(vendorID, status, inputResult.value);
-                                }
-                            });
-                        } else {
-                            changeVendorStatus(vendorID, status, '');
-                        }
-                    }
-                });
-            });
-
-            function changeVendorStatus(vendorID, newStatus, remark) {
-                $.ajax({
-                    url: "{{ route('change.vendor.account.status') }}",
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    data: {
-                        vendor_id: vendorID,
-                        new_status: newStatus,
-                        remark: remark,
-                    },
-                    success: function(response) {
-                        Swal.fire('Updated!', 'The vendor status has been updated.', 'success');
-                        location.reload();
-                    },
-                    error: function(xhr, status, error) {
-                        Swal.fire('Failed!', 'There was a problem changing the status.', 'error');
-                    }
-                });
-            }
         });
     </script>
 @endsection
