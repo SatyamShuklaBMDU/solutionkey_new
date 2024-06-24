@@ -66,6 +66,7 @@ class CustomerController extends Controller
     public function customerDetails(Request $request)
     {
         $user = $request->user();
+        $user->profile_pic = 'https://bmdublog.com/solutionkey/public/' . $user->profile_pic;
         if ($user) {
             return response()->json(['status' => true, 'user' => $user], 200);
         } else {
