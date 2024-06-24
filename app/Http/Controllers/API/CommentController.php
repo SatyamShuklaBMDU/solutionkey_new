@@ -5,8 +5,8 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class CommentController extends Controller
 {
@@ -18,7 +18,7 @@ class CommentController extends Controller
                 'content' => 'required|string',
             ]);
             if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 400);
+                return response()->json(['status' => false, 'errors' => $validator->errors()], 400);
             }
             $login = Auth::id();
             $comment = new Comment();
@@ -26,9 +26,9 @@ class CommentController extends Controller
             $comment->content = $request->input('content');
             $comment->comment_user_id = $login;
             $comment->save();
-            return response()->json(['message' => 'Comment created successfully', 'comment' => $comment], 201);
+            return response()->json(['status' => true, 'message' => 'Comment created successfully', 'comment' => $comment], 201);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Internal Server Error'], 500);
+            return response()->json(['status' => false, 'error' => 'Internal Server Error'], 500);
         }
     }
 }
