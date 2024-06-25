@@ -320,8 +320,8 @@ class CustomerController extends Controller
                 'city' => $vendor->city,
                 'state' => $vendor->state,
                 'address' => $vendor->address,
-                'profile_picture' => $profile . '/' . $vendor->profile_picture,
-                'cover_picture' => $profile . '/' . $vendor->cover_picture,
+                'profile_picture' => $vendor->profile_picture ? $profile . '/' . $vendor->profile_picture : '',
+                'cover_picture' => $vendor->cover_picture ? $profile . '/' . $vendor->cover_picture : '',
             ];
         })->toArray();
         return response()->json(['status' => true, 'vendors' => $vendorsArray, 'message' => 'Data Successfully'], Response::HTTP_OK);
@@ -357,8 +357,8 @@ class CustomerController extends Controller
                 'city' => $vendor->city,
                 'state' => $vendor->state,
                 'address' => $vendor->address,
-                'profile_picture' => $profileUrl . '/' . $vendor->profile_picture,
-                'cover_picture' => $profileUrl . '/' . $vendor->cover_picture,
+                'profile_picture' => $vendor->profile_picture ? $profileUrl . '/' . $vendor->profile_picture : '',
+                'cover_picture' => $vendor->cover_picture ? $profileUrl . '/' . $vendor->cover_picture : '',
                 'account_status' => $vendor->account_status,
                 'created_at' => $vendor->created_at,
                 'updated_at' => $vendor->updated_at,

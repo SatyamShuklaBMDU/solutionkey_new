@@ -17,15 +17,15 @@ class Customer extends Authenticatable
     {
         if (!$this->isFollowing($vendor)) {
             Follow::create([
-                'customer_id' => Auth::id(), 
+                'customer_id' => Auth::id(),
                 'vendor_id' => $vendor->id,
             ]);
         }
     }
 
-    public function unfollow(Vendor $user) 
+    public function unfollow(Vendor $vendor)
     {
-        Follow::where('customer_id', Auth::id())->where('vendor_id', $user->id)->delete();
+        Follow::where('customer_id', Auth::id())->where('vendor_id', $vendor->id)->delete();
     }
 
     public function isFollowing(Vendor $vendor)
@@ -36,8 +36,8 @@ class Customer extends Authenticatable
     public function following()
     {
         return $this->hasManyThrough(
-            Vendor::class, 
-            Follow::class, 
+            Vendor::class,
+            Follow::class,
             'customer_id',
             'id',
             'id',

@@ -10,16 +10,25 @@ use Illuminate\Support\Facades\Auth;
 
 class FollowController extends Controller
 {
-    public function follow(FollowUnfollowRequest $request){
+    public function follow(FollowUnfollowRequest $request)
+    {
         $vendorToFollow = Vendor::findOrfail(request('vendor_id'));
-        Auth::user()->follow($vendorToFollow);
+        $user = Auth::user();
+        if ($user->isFollowing($vendorToFollow)) {
+            return response()->json(['status' => true, 'message' => 'Already following'], 200);
+        }
+        $user->follow($vendorToFollow);
         return response()->noContent(200);
     }
 
     public function unfollow(FollowUnfollowRequest $request)
     {
         $vendorToUnFollow = Vendor::findOrfail(request('vendor_id'));
-        Auth::user()->unfollow($vendorToUnFollow);
+        $user = Auth::user();
+        if (!$user->isFollowing($vendorToUnFollow)) {
+            return response()->json(['status' => false, 'message' => 'Not following'], 200);
+        }
+        $user->unfollow($vendorToUnFollow);
         return response()->noContent(200);
     }
 }
