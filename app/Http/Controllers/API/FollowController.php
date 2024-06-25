@@ -18,7 +18,7 @@ class FollowController extends Controller
             return response()->json(['status' => true, 'message' => 'Already following'], 200);
         }
         $user->follow($vendorToFollow);
-        return response()->noContent(200);
+        return response()->json(['status' => true, 'message' => 'Followed'], 200);
     }
 
     public function unfollow(FollowUnfollowRequest $request)
@@ -29,6 +29,6 @@ class FollowController extends Controller
             return response()->json(['status' => false, 'message' => 'Not following'], 200);
         }
         $user->unfollow($vendorToUnFollow);
-        return response()->noContent(200);
+        return response()->json(['status' => true, 'message' => 'Unfollowed'], 200);
     }
 }
