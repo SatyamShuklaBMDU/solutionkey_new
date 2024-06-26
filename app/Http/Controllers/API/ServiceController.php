@@ -10,7 +10,7 @@ class ServiceController extends Controller
 {
     public function index()
     {
-        $servicesUrl = "https://bmdublog.com/SolutionkeyPartner/public/";
+        $servicesUrl = "https://bmdublog.com/solutionkey/public/";
         $services = Service::where('status', true)->latest()->get();
         if ($services->isEmpty()) {
             return response()->json(['status' => false, 'message' => 'No Services found.'], Response::HTTP_NOT_FOUND);

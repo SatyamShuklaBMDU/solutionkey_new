@@ -365,7 +365,7 @@ class CustomerController extends Controller
                 'posts' => $vendor->posts->map(function ($post) use ($posturl) {
                     return [
                         'id' => $post->id,
-                        'post_image' => $posturl . $post->post_image,
+                        'post_image' => $post->post_image? $posturl . $post->post_image : '',
                         'content' => $post->content,
                         'created_at' => $post->created_at,
                         'updated_at' => $post->updated_at,

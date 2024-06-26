@@ -146,23 +146,26 @@
                                         </thead>
                                         <tbody>
                                             @foreach ($banners as $banner)
-                                                <td class="text-center">{{ $loop->iteration }}</td>
-                                                <td class="text-center">{{ $banner->for }}</td>
-                                                <td class="text-center"><a href="{{ asset($banner->image) }}"
-                                                        target="_blank" rel="noopener noreferrer"><img
-                                                            src="{{ asset($banner->image) }}" width="50px" height="50px"
-                                                            alt="No Image"></a></td>
-                                                <td class="text-center"><input type="checkbox" class="vendor-status-switch"
-                                                        {{ $banner->status == '1' ? 'checked' : '' }}
-                                                        data-id="{{ $banner->id }}"></td>
-                                                <td class="text-center">
-                                                    <button class="btn btn-secondary editBannerBtn"
-                                                        data-id="{{ $banner->id }}" data-for="{{ $banner->for }}"
-                                                        data-image="{{ $banner->image }}"
-                                                        data-status="{{ $banner->status }}">Edit</button>
-                                                    <button class="btn btn-danger deleteBannerBtn"
-                                                        data-id="{{ $banner->id }}">Delete</button>
-                                                </td>
+                                                <tr>
+                                                    <td class="text-center">{{ $loop->iteration }}</td>
+                                                    <td class="text-center">{{ $banner->for }}</td>
+                                                    <td class="text-center"><a href="{{ asset($banner->image) }}"
+                                                            target="_blank" rel="noopener noreferrer"><img
+                                                                src="{{ asset($banner->image) }}" width="50px"
+                                                                height="50px" alt="No Image"></a></td>
+                                                    <td class="text-center"><input type="checkbox"
+                                                            class="vendor-status-switch"
+                                                            {{ $banner->status == '1' ? 'checked' : '' }}
+                                                            data-id="{{ $banner->id }}"></td>
+                                                    <td class="text-center">
+                                                        <button class="btn btn-secondary editBannerBtn"
+                                                            data-id="{{ $banner->id }}" data-for="{{ $banner->for }}"
+                                                            data-image="{{ $banner->image }}"
+                                                            data-status="{{ $banner->status }}">Edit</button>
+                                                        <button class="btn btn-danger deleteBannerBtn"
+                                                            data-id="{{ $banner->id }}">Delete</button>
+                                                    </td>
+                                                </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
